@@ -1,7 +1,7 @@
 # Uso de arrays en NumPy
 ## Índice
-- [Características de los arrays](#Caracter%D3%ADsticas-de-los-arrays)
-    - [Características principales](#Caracter%D3%ADsticas-principales)
+- [Características de los arrays](#características-de-los-arrays)
+    - [Características principales](#características-principales)
     - [Ventajas sobre las listas de Python](#ventajas-sobre-las-listas-de-python)
     - [Operaciones comunes](#operaciones-comunes)
     - [Limitación principal](#limitación-principal)
@@ -11,6 +11,8 @@
     - [Creación desde una tupla](#creación-desde-una-tupla)
     - [Crear arrays desde rangos de números](#crear-arrays-desde-rangos-de-números)
     - [Relleno de arrays con un mismo valor](#relleno-de-arrays-con-un-mismo-valor)
+    - [Creación de arrays vacíos](#creación-de-arrays-vacíos)
+    - [Creación de arrays con valores aleatorios](#creación-de-arrays-con-valores-aleatorios)
 - [Acceso y modificación de elementos](#acceso-y-modificación-de-elementos)
     - [Acceder a un elemento](#acceder-a-un-elemento)
 - [Tipos de datos numéricos de los arrays](#tipos-de-datos-numéricos-de-los-arrays)
