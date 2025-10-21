@@ -2,4 +2,4 @@
 Profesor: Jorge Sánchez Asenjo
 
 ## Unidad 01 - Lectura y escritura de datos con NumPy y Pandas
-- [Arrays de NumPy](Arrays_NumPy.md)
+- [Arrays de NumPy](markdown/U01/Arrays_NumPy.md)
