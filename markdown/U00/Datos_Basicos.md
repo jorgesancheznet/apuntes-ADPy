@@ -9,6 +9,7 @@
     - [Números decimales](#números-decimales)
     - [Valores booleanos](#valores-booleanos)
     - [Cadenas de caracteres. Strings.](#cadenas-de-caracteres-strings)
+- [Comprobar el tipo de datos. `isinstance`](#comprobar-el-tipo-de-datos-isinstance)
 - [Conversión de tipos](#conversión-de-tipos)
     - [Conversión a enteros](#conversión-a-enteros)
     - [Conversión a decimales](#conversión-a-decimales)
@@ -192,6 +193,30 @@ multilínea.'''
 texto4 = """Esta también
 lo es."""
 ```
+
+## Comprobar el tipo de datos. `isinstance`
+La función `isinstance` permite comprobar si una variable es de un tipo específico.
+
+Para ello se pasan dos argumentos: la variable a comprobar y el tipo de dato.
+
+
+
+
+```python
+x = 10
+y = "Hola"
+print(isinstance(x, int))    # Muestra: True
+print(isinstance(y, str))    # Muestra: True
+print(isinstance(x, float))  # Muestra: False
+print(isinstance(y, bool))   # Muestra: False
+
+```
+
+    True
+    True
+    False
+    False
+    
 
 ## Conversión de tipos
 ### Conversión a enteros

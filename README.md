@@ -1,5 +1,11 @@
 # Apuntes del módulo de Análisis de Datos con Python
 Profesor: Jorge Sánchez Asenjo
 
+## [Unidad 00 - Apuntes iniciales](markdown/U00/README.md)
+- [Manejo de datos básicos en Python](markdown/U00/Datos_Basicos.md)
+- [Estructuras de datos en Python](markdown/U00/Estructuras_datos.md)
+- [Estructuras de control en Python](markdown/U00/Estructuras_control.md)
+
 ## [Unidad 01 - Lectura y escritura de datos con NumPy y Pandas](markdown/U01/README.md)
 - [Arrays de NumPy](markdown/U01/Arrays_NumPy.md)
+- [DataFrames de Pandas](markdown/U01/pandas.md)
