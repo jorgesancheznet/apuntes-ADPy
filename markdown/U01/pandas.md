@@ -67,6 +67,8 @@
   - [Método `unique()`](#Método-`unique()`)
   - [Método `value_counts()`](#Método-`value_counts()`)
   - [Método `describe()`](#Método-`describe()`)
+  - [Método `astype()`](#Método-`astype()`)
+  - [Método `sort_values()`](#Método-`sort_values()`)
 
 - [Obtener información del DataFrame](#Obtener-información-del-DataFrame)
   - [Método info()](#Método-info())
@@ -154,7 +156,7 @@ print("\nSerie a partir de un array de NumPy:\n",serie)
     3    40
     4    50
     dtype: int64
-    
+
 
 En todos los casos podemos especificar el tipo de dato de los elementos de la Serie utilizando el parámetro `dtype`.
 
@@ -175,7 +177,7 @@ print(serie)
     8     9.0
     9    10.0
     dtype: float64
-    
+
 
 ### Modificar índices durante la creación de una Serie
 Por defecto cada elemento de la Serie recibe un índice numérico que comienza en 0.
@@ -193,7 +195,7 @@ print(serie)
     d    40
     e    50
     dtype: int64
-    
+
 
 ### Creación de una Serie a partir de un diccionario
 También podemos crear una Serie a partir de un diccionario, donde las claves del diccionario se convierten en los índices de la Serie y los valores asociados a cada clave se convierten en los valores de la Serie.
@@ -211,7 +213,7 @@ print(serie)
     d    40
     e    50
     dtype: int64
-    
+
 
 ### Creación de una Serie a partir de un valor escalar
 También podemos crear una Serie a partir de un valor escalar (un valor literal), especificando el valor y el número de elementos que queremos en la Serie.
@@ -243,7 +245,7 @@ print(serie)
     8    200
     9    200
     dtype: int64
-    
+
 
 ## Creación de DataFrames
 ### ¿Qué es un DataFrame?
@@ -275,7 +277,7 @@ print(df)
     1    Luis    34  Barcelona
     2  Carlos    29   Valencia
     3   Marta    42    Sevilla
-    
+
 
 Las claves de los datos del diccionario origen se convierten en los nombres de las columnas del DataFrame, y los valores asociados a cada clave se convierten en valores de cada fila. Se genera una fila por cada elemento de las listas asociadas a las claves del diccionario.
 
@@ -300,7 +302,7 @@ print(df)
     1    Luis  Barcelona    34
     2  Carlos   Valencia    29
     3   Marta    Sevilla    42
-    
+
 
 ### Creación de un DataFrame a partir de varias listas
 Otra forma común de crear un DataFrame es a partir de varias listas, donde cada lista representa una columna de datos.
@@ -325,7 +327,7 @@ print(df)
     1    Luis    34  Barcelona
     2  Carlos    29   Valencia
     3   Marta    42    Sevilla
-    
+
 
 ### Creación de un DataFrame a partir de arrays de NumPy
 También podemos crear un DataFrame a partir de arrays de NumPy, lo que es útil cuando trabajamos con datos numéricos.
@@ -344,7 +346,7 @@ print(df)
     1    Luis    34  Barcelona
     2  Carlos    29   Valencia
     3   Marta    42    Sevilla
-    
+
 
 Los arrays bidimensionales de NumPy también se pueden utilizar para crear DataFrames. En este caso, cada columna del array se convierte en una columna del DataFrame.
 
@@ -366,7 +368,7 @@ print(df)
     1      18     22     28
     2      20     24     30
     3      17     21     27
-    
+
 
 ### Creación de un DataFrame a partir de una lista de listas
 Otra forma común de crear un DataFrame es a partir de una lista de listas, donde cada sublista representa una fila de datos.
@@ -388,7 +390,7 @@ print(df)
     1    Luis    34  Barcelona
     2  Carlos    29   Valencia
     3   Marta    42    Sevilla
-    
+
 
 En lugar de listas podemos utilizar tuplas para representar cada fila de datos:
 
@@ -422,7 +424,7 @@ print(df)
     2000  3000000    1500000       NaN
     2010  3200000    1600000  820000.0
     2020  3300000    1650000  850000.0
-    
+
 
 ## Creación de Índices
 ### ¿Qué es un índice?
@@ -459,7 +461,7 @@ print("\nDataFrame con índices personalizados:\n",df)
     Ana           9.75     8.5      3.7
     Luis          7.00     6.5      5.0
     Marta         8.00     9.0      7.5
-    
+
 
 ### Creación de índices personalizados
 Podemos crear un objeto de índice utilizando el constructor `pd.Index()`, que puede recibir como argumento una colección de etiquetas, como una lista o un array de NumPy.
@@ -477,7 +479,7 @@ print("\nÍndice creado a partir de un array de NumPy:\n",indices)
     
     Índice creado a partir de un array de NumPy:
      Index([1, 2, 3, 4, 5], dtype='int64')
-    
+
 
 Luego podemos usar estos índices al crear Series o DataFrames.
 
@@ -508,7 +510,7 @@ print("\nDataFrame con índice personalizado:\n",df)
     Lengua     7.50   8.0
     Inglés     6.00   9.0
     Arte       5.50   7.5
-    
+
 
 ## Mostrar solo algunos datos de DataFrames y Series
 Para visualizar solo las primeras o las últimas filas de un DataFrame, podemos utilizar los métodos `head()` y `tail()`, respectivamente.
@@ -541,7 +543,7 @@ print(df.tail(3))  # Muestra las últimas 3 filas
     5  Javier    27   Granada
     6   Lucía    36  Zaragoza
     7   Diego    30    Málaga
-    
+
 
 Ambos métodos funcionan también con Series.
 
@@ -568,7 +570,7 @@ print(serie.tail(4))  # Muestra los últimos 4 elementos
     18    19
     19    20
     dtype: int64
-    
+
 
 ## Propiedades de las Series y los DataFrames
 Tanto las Series como los DataFrames tienen varias propiedades útiles que nos permiten obtener información sobre su estructura y contenido.
@@ -600,7 +602,7 @@ print("\nDatos del Índice como array de NumPy:\n",indice.values)
     
     Datos del Índice como array de NumPy:
      ['a' 'b' 'c' 'd' 'e']
-    
+
 
 ### Propiedad dtype
 La propiedad `dtype` devuelve el tipo de dato de los elementos contenidos en una Serie, índice o DataFrame.
@@ -630,7 +632,7 @@ print("\nTipo de dato de los elementos del Índice:\n",indice.dtype)
     
     Tipo de dato de los elementos del Índice:
      object
-    
+
 
 ### Propiedad size
 La propiedad `size` devuelve el número total de elementos contenidos en una Serie o DataFrame.
@@ -652,7 +654,7 @@ print("\nNúmero total de elementos en la Serie:\n",serie.size)
     
     Número total de elementos en la Serie:
      5
-    
+
 
 ### Propiedad name
 La propiedad `name` permite asignar o recuperar el nombre de una Serie o de un índice. Se trata de un valor interno que puede ser útil para identificar la Serie o el índice en contextos más complejos.
@@ -672,7 +674,7 @@ print("\nNombre del Índice:\n",indice.name)
     
     Nombre del Índice:
      Letras
-    
+
 
 ### Propiedad shape
 La propiedad `shape` devuelve una tupla que indica las dimensiones de una Serie o DataFrame.
@@ -698,7 +700,7 @@ print("\nDimensiones de la Serie:\n",serie.shape)
     
     Dimensiones de la Serie:
      (5,)
-    
+
 
 ### Propiedad index
 Permite obtener el índice asociado a una Serie o DataFrame.
@@ -725,7 +727,7 @@ print("\nÍndice de la Serie con etiquetas personalizadas:\n",serie.index)
     
     Índice de la Serie con etiquetas personalizadas:
      Index(['a', 'b', 'c', 'd', 'e'], dtype='object')
-    
+
 
 ### Propiedad columns
 La propiedad `columns` devuelve un objeto de tipo `Index` que contiene los nombres de las columnas de un DataFrame.
@@ -742,7 +744,7 @@ print("Nombres de las columnas del DataFrame:\n",df.columns)
 
     Nombres de las columnas del DataFrame:
      Index(['Nombre', 'Edad', 'Ciudad'], dtype='object')
-    
+
 
 ### Función len
 La función `len()` devuelve el número de elementos en una Serie o el número de filas en un DataFrame.
@@ -764,7 +766,7 @@ print("\nNúmero de elementos en la Serie:\n",len(serie))
     
     Número de elementos en la Serie:
      5
-    
+
 
 ## Selección de datos
 Podemos acceder a los datos contenidos en un DataFrame y en una Serie utilizando diferentes métodos y técnicas.
@@ -784,7 +786,7 @@ print("\nElemento en la posición 2:\n",serie[2])  # Acceder al elemento en la p
     
     Elemento en la posición 2:
      30
-    
+
 
 Podemos modificar un elemento específico de una Serie utilizando su índice.
 
@@ -802,7 +804,7 @@ print("Serie con el elemento modificado:\n",serie)
     d     40
     e     50
     dtype: int64
-    
+
 
 ### Indexaciones de series
 Se puede utilizar la forma `inicio:fin:paso` para acceder a un rango de elementos en una Serie.
@@ -846,7 +848,7 @@ print("\nElementos en orden inverso:\n",serie[::-1])  # Elementos en orden inver
     1    20
     0    10
     dtype: int64
-    
+
 
 ### Obtener columnas de un DataFrame en forma de Serie
 Podemos acceder a una columna específica de un DataFrame utilizando el nombre de la columna entre corchetes `[]`, usando el estilo de acceder a los datos de los diccionarios. Esto devuelve una **Serie** que contiene los datos de esa columna.
@@ -868,7 +870,7 @@ print(serie)
     2    29
     3    42
     Name: Edad, dtype: int64
-    
+
 
 Se puede indicar también el nombre de la columna como un atributo del DataFrame utilizando el punto `.`. Esta forma es más corta y legible, pero solo funciona si el nombre de la columna es un identificador válido en Python (sin espacios, sin caracteres especiales, etc.).
 
@@ -884,7 +886,7 @@ print(serie)
     3    42
     4    39
     Name: Edad, dtype: int64
-    
+
 
 Puesto que lo que obtenemos es una Serie, podemos utilizar las técnicas de acceso a datos que hemos visto para las Series y así llegar a un dato concreto.
 
@@ -895,7 +897,7 @@ print("Edad de la tercera persona:\n",df["Edad"][2])  # Edad de la tercera perso
 
     Edad de la tercera persona:
      29
-    
+
 
 También podemos modificar un dato concreto de una columna accediendo primero a la columna como una Serie y luego al dato específico utilizando su índice.
 
@@ -911,14 +913,14 @@ print(df)
     2  Carlos    99  Valencia
     3   Marta    42   Sevilla
     4     Eva    39    Madrid
-    
+
 
     C:\Users\jorge\AppData\Local\Temp\ipykernel_3764\3528726459.py:1: SettingWithCopyWarning: 
     A value is trying to be set on a copy of a slice from a DataFrame
     
     See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
       df['Edad'][2] = 99  # Modificar la edad de la tercera persona (índice 2)
-    
+
 
 Pero esta forma de modificar valores está desaconsejada (se produce un warning avisando de que no es apropiada). Más adelante veremos la forma correcta de hacerlo usando *loc* o *iloc*.
 
@@ -941,7 +943,7 @@ print(df_seleccionado)
     1    Luis  Barcelona
     2  Carlos   Valencia
     3   Marta    Sevilla
-    
+
 
 ### Acceso a filas de un DataFrame
 Podemos utilizar indexaciones para obtener filas concretas de un DataFrame.
@@ -972,7 +974,7 @@ print("\nTres primeras filas:\n",df[:3])  # Tres primeras filas
     0     Ana    28     Madrid
     1    Luis    34  Barcelona
     2  Carlos    29   Valencia
-    
+
 
 Se pueden hacer indexaciones aunque los índices no sean numéricos
 
@@ -995,7 +997,7 @@ print("\nFilas desde el índice 'b' hasta el 'c' (incluido):\n",df['b':'c'])  # 
         Nombre  Edad     Ciudad
     b    Luis    34  Barcelona
     c  Carlos    29   Valencia
-    
+
 
 También se pueden mostrar valores de columnas concretas
 
@@ -1021,7 +1023,7 @@ print("\nTres primeros valores de las columnas 'Nombre' y 'Edad':\n",df[['Nombre
     0     Ana    28
     1    Luis    34
     2  Carlos    29
-    
+
 
 ### Acceso a filas y columnas con loc[]
 El método `loc[]` permite acceder a los datos utilizando las etiquetas de las filas y columnas
@@ -1079,7 +1081,7 @@ print("\nValores de las columnas 'Nombre' y 'Edad':\n",df.loc[:, ['Nombre', 'Eda
     1    Luis    34
     2  Carlos    29
     3   Marta    42
-    
+
 
 Se puede modificar un valor concreto usando *loc*
 
@@ -1096,7 +1098,7 @@ print("\nDataFrame con la ciudad de la tercera fila modificada:\n",df)
     1    Luis    34  Barcelona
     2  Carlos    29   Palencia
     3   Marta    42    Sevilla
-    
+
 
 Podemos modificar varios valores a la vez
 
@@ -1124,7 +1126,7 @@ print("\nDataFrame con los nombres de las primeras dos filas modificados:\n",df)
     1   María    25        Lugo
     2  Carlos    25     Ourense
     3   Marta    25  Pontevedra
-    
+
 
 ### Acceso por posición con iloc[]
 El método `iloc[]` permite acceder a los datos utilizando las posiciones enteras de las filas y columnas.
@@ -1160,7 +1162,7 @@ print("\nValor de la tercera fila y columna Ciudad:\n",df.iloc[2, 2])  # Valor e
     
     Valor de la tercera fila y columna Ciudad:
      Valencia
-    
+
 
 `iloc` también permite modificar los valores de un DataFrame.
 
@@ -1195,7 +1197,7 @@ print("\nDataFrame con los nombres de las primeras dos filas modificados:\n",df)
     1   María    25  Barcelona
     2  Carlos    25   Palencia
     3   Marta    25    Sevilla
-    
+
 
 ## Filtrar datos en un DataFrame
 ### Filtrado lógico
@@ -1227,7 +1229,7 @@ print("\nDataFrame filtrado (nombre = 'Ana'):\n",df_filtrado)
     DataFrame filtrado (nombre = 'Ana'):
        Nombre  Edad  Ciudad
     0    Ana    28  Madrid
-    
+
 
 Se pueden unir varias condiciones con operaciones lógicas (& para and,  | para or, ...)
 
@@ -1268,7 +1270,7 @@ print("\nDataFrame filtrado (edad > 35 y ciudad != 'Madrid'):\n",df_filtrado)
     DataFrame filtrado (edad > 35 y ciudad != 'Madrid'):
        Nombre  Edad   Ciudad
     3  Marta    42  Sevilla
-    
+
 
 ### Método filter()
 El método `filter()` permite filtrar las columnas o filas de un DataFrame basándose en etiquetas o condiciones específicas.
@@ -1327,7 +1329,7 @@ print("\nDataFrame con filas cuyo índice termina en '7':\n",df_filtrado)
      Empty DataFrame
     Columns: []
     Index: [cod203, cod475, cod507, cod607]
-    
+
 
 ### Filtrado por tipo de datos
 Se realiza mediante el método `select_dtypes`, al que se le pasa el tipo de datos que queremos seleccionar
@@ -1366,7 +1368,7 @@ print("\nFiltrado por tipo distinto de 'object':\n",df_filtrado)
     1    34
     2    29
     3    42
-    
+
 
 ### Filtrado con arrays booleanos
 Podemos filtrar un DataFrame utilizando arrays booleanos, que son arrays de valores booleanos de la misma longitud que el DataFrame.
@@ -1398,7 +1400,7 @@ print("\nValores filtrados:\n",df[filtro])
         Nombre  Edad    Ciudad
     0     Ana    28    Madrid
     2  Carlos    29  Valencia
-    
+
 
 ## Operar con DataFrames
 ### Eliminar columnas
@@ -1421,7 +1423,7 @@ print("DataFrame con la columna 'Ciudad' eliminada:\n",df)
     1    Luis    34
     2  Carlos    29
     3   Marta    42
-    
+
 
 ### Añadir columnas a DataFrames
 Basta con indicar su nombre entre corchetes e indicar un primer valor con el que se rellenarán todas sus filas
@@ -1443,7 +1445,7 @@ print("DataFrame con nueva columna 'Departamento':\n", df)
     1    Luis    34  Barcelona       Ventas
     2  Carlos    29   Valencia       Ventas
     3   Marta    42    Sevilla       Ventas
-    
+
 
 Podemos también dar varios valores concretos a la columna
 
@@ -1464,7 +1466,7 @@ print("DataFrame con nueva columna 'Departamento':\n", df)
     1    Luis    34  Barcelona   Producción
     2  Carlos    29   Valencia   Producción
     3   Marta    42    Sevilla       Ventas
-    
+
 
 ### Eliminar filas
 Podemos eliminar filas utilizando el método `drop()`, especificando el índice de la fila que queremos eliminar y el parámetro `inplace=True` para modificar el DataFrame original (de otro modo se devuelve una copia y el original se deja sin modificar).
@@ -1485,7 +1487,7 @@ print("DataFrame con la segunda fila eliminada:\n",df)
     0     Ana    28    Madrid
     2  Carlos    29  Valencia
     3   Marta    42   Sevilla
-    
+
 
 ### Trasponer un DataFrame
 Podemos trasponer un DataFrame utilizando el atributo `T`, que intercambia las filas y las columnas. Este atributo devuelve una nueva vista con el DataFrame traspuesto.
@@ -1507,7 +1509,7 @@ print("DataFrame traspuesto:\n",df_traspuesto)
     Nombre     Ana       Luis    Carlos    Marta
     Edad        28         34        29       42
     Ciudad  Madrid  Barcelona  Valencia  Sevilla
-    
+
 
 ### Operaciones matemáticas
 Podemos sumar escalares a columnas, filas o selecciones concretas de un DataFrame
@@ -1549,7 +1551,7 @@ print("\nDataFrame con las ventas incrementadas en 150 para Madrid:\n",df)
     1    Luis    39  Barcelona   650.0
     2  Carlos    34   Valencia  1860.5
     3   Marta    47     Madrid  1080.2
-    
+
 
 Podemos operar usando valores de una Serie:
 
@@ -1573,7 +1575,7 @@ print("Ventas incrementadas con los datos de la Serie:\n",df)
     1    Luis    34  Barcelona   850.0
     2  Carlos    29   Valencia  2160.5
     3   Marta    42     Madrid  1330.2
-    
+
 
 Lo mismo con otros tipos de datos compatibles como listas, tuplas, arrays de NumPy, etc.
 
@@ -1609,7 +1611,7 @@ print("\nDataFrame con las ventas incrementadas:\n",df)
     1    Luis    31  Barcelona   715.00
     2  Carlos    30   Valencia  2418.65
     3   Marta    50     Madrid  1302.28
-    
+
 
 ### Usar cálculos de totales
 Las series de panda poseen cálculos de totales que se aplican a los valores de la serie. Disponemos de los métodos: `count`, `min`, `max`, `mean`, `std`, `sum`, etc.
@@ -1636,7 +1638,7 @@ print("Suma de las ventas:\n",df['Ventas'].sum())
      650.0
     Suma de las ventas:
      4641.2
-    
+
 
 ### Método **agg**
 Otra forma de realizar estos cálculos, es mediante la función `agg` la cual permite indicar la función de cálculo como string.
@@ -1666,7 +1668,7 @@ print("Mínimo y máximo:\n",df['Ventas'].agg(['max','min']))
      max    1860.5
     min     650.0
     Name: Ventas, dtype: float64
-    
+
 
 ### Uso de funciones **callback** para cálculos de totales
 Se pueden personalizar los cálculos de totales mediante funciones personales.
@@ -1694,7 +1696,7 @@ print(df['Ventas'].agg(["max","min",dif_max_min]))
     min             650.0
     dif_max_min    1210.5
     Name: Ventas, dtype: float64
-    
+
 
 ### Trasformaciones
 El métdo `agg()` permite aplicar funciones de cálculo, las cuales devuelven un único valor. Si queremos aplicar funciones que transformen cada uno de los datos de una serie, debemos usar el método `transform()`.
@@ -1723,7 +1725,7 @@ print("Ventas con IVA aplicado:\n",df)
     1    Luis    34  Barcelona   650.0         786.500
     2  Carlos    29   Valencia  1860.5        2251.205
     3   Marta    42     Madrid   930.2        1125.542
-    
+
 
 Aunque en este caso es más sencillo usar operaciones vectorizadas, el método `transform()` es útil cuando se necesitan funciones de transformación más complejas.
 
@@ -1747,7 +1749,7 @@ print("Ventas con IVA aplicado (vectorizado):\n",df)
     1    Luis    34  Barcelona   650.0         786.500
     2  Carlos    29   Valencia  1860.5        2251.205
     3   Marta    42     Madrid   930.2        1125.542
-    
+
 
 ### Método `map()`
 El método `map()` permite aplicar una función a cada uno de los elementos de una Serie, devolviendo una nueva Serie con los resultados.
@@ -1779,7 +1781,7 @@ print("DataFrame con la media de las notas:\n",df)
     1    Luis  [7.0, 8.0, 9.0]   8.00
     2  Carlos              6.5   6.50
     3   Marta       [9.0, 8.5]   8.75
-    
+
 
 ### Método `unique()`
 El método `unique()` devuelve un array de NumPy que contiene los valores únicos presentes en una Serie.
@@ -1795,7 +1797,7 @@ print("Valores únicos en la Serie:\n",valores_unicos)
 
     Valores únicos en la Serie:
      ['Manzana' 'Plátano' 'Naranja']
-    
+
 
 ### Método `value_counts()`
 El método `value_counts()` cuenta la frecuencia de cada valor único en una Serie y devuelve una nueva Serie con los valores únicos como índice y sus frecuencias como valores.
@@ -1812,7 +1814,7 @@ print("Frecuencia de cada fruta:\n",frecuencias)
     Plátano    2
     Naranja    1
     Name: count, dtype: int64
-    
+
 
 ### Método `describe()`
 El método `describe()` proporciona estadísticas descriptivas resumidas de una Serie o DataFrame, incluyendo conteo, media, desviación estándar, valores mínimos y máximos, y percentiles.
@@ -1851,7 +1853,62 @@ print("\nEstadísticas descriptivas del DataFrame:\n",estadisticas_df)
     50%    31.500000  1065.350000
     75%    36.000000  1365.500000
     max    42.000000  1860.500000
+
+
+### Método `astype()`
+El método `astype()` permite convertir el tipo de datos de una Serie a otro tipo especificado.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Salario': ['2875', '2300', '1700', '1650']
+})
+df['Salario'] = df['Salario'].astype('float64')
+print("DataFrame con la columna 'Salario' convertida a float:\n",df)
+```
+
+    DataFrame con la columna 'Salario' convertida a float:
+        Nombre  Salario
+    0     Ana   2875.0
+    1    Luis   2300.0
+    2  Carlos   1700.0
+    3   Marta   1650.0
+
+
+### Método `sort_values()`
+El método `sort_values()` permite ordenar los valores de una Serie o DataFrame en orden ascendente o descendente.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+})
+# Ordenar por edad en orden ascendente
+df_ordenado = df.sort_values(by='Edad')
+print("DataFrame ordenado por edad (ascendente):\n",df_ordenado)
+# Ordenar por edad en orden descendente
+df_ordenado_desc = df.sort_values(by='Edad', ascending=False)
+print("\nDataFrame ordenado por edad (descendente):\n",df_ordenado_desc)
+
+```
+
+    DataFrame ordenado por edad (ascendente):
+        Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    2  Carlos    29   Valencia
+    1    Luis    34  Barcelona
+    3   Marta    42    Sevilla
     
+    DataFrame ordenado por edad (descendente):
+        Nombre  Edad     Ciudad
+    3   Marta    42    Sevilla
+    1    Luis    34  Barcelona
+    2  Carlos    29   Valencia
+    0     Ana    28     Madrid
+
 
 ## Obtener información del DataFrame
 ### Método info()
@@ -1878,7 +1935,7 @@ print(df.info())
     dtypes: int64(1), object(2)
     memory usage: 228.0+ bytes
     None
-    
+
 
 ### Propiedad columns
 La propiedad `columns` devuelve un objeto de tipo `Index` que contiene los nombres de las columnas del DataFrame.
@@ -1889,7 +1946,7 @@ print(df.columns)
 ```
 
     Index(['Nombre', 'Edad', 'Ciudad'], dtype='object')
-    
+
 
 ### Propiedad shape
 La propiedad `shape` devuelve una tupla que indica el número de filas y columnas del DataFrame.
@@ -1900,7 +1957,7 @@ print(df.shape)
 ```
 
     (4, 3)
-    
+
 
 ### Propiedad dtypes
 La propiedad `dtypes` devuelve una **Serie** que contiene los tipos de datos de cada columna del DataFrame.
@@ -1914,7 +1971,7 @@ print(df.dtypes)
     Edad       int64
     Ciudad    object
     dtype: object
-    
+
 
 ### Propiedad index
 La propiedad `index` devuelve el índice (etiquetas de las filas) del DataFrame
@@ -1925,4 +1982,4 @@ print(df.index);
 ```
 
     RangeIndex(start=0, stop=4, step=1)
-    
+
