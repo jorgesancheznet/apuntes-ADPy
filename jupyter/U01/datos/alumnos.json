@@ -1,0 +1,22 @@
+[
+  {"nombre":"Ana","apellidos":"García López","codigo":"A001","matematicas":8,"lengua":7,"ingles":9},
+  {"nombre":"Luis","apellidos":"Martínez Pérez","codigo":"A002","matematicas":6,"lengua":8,"ingles":7},
+  {"nombre":"María","apellidos":"Sánchez Ruiz","codigo":"A003","matematicas":9,"lengua":9,"ingles":8},
+  {"nombre":"Carlos","apellidos":"Fernández Gómez","codigo":"A004","matematicas":5,"lengua":6,"ingles":6},
+  {"nombre":"Lucía","apellidos":"Romero Díaz","codigo":"A005","matematicas":10,"lengua":9,"ingles":10},
+  {"nombre":"Jorge","apellidos":"Vargas Morales","codigo":"A006","matematicas":7,"lengua":5,"ingles":6},
+  {"nombre":"Sofía","apellidos":"Núñez Herrera","codigo":"A007","matematicas":8,"lengua":8,"ingles":9},
+  {"nombre":"Pablo","apellidos":"Ortiz Castillo","codigo":"A008","matematicas":4,"lengua":6,"ingles":5},
+  {"nombre":"Elena","apellidos":"Prieto Ramos","codigo":"A009","matematicas":9,"lengua":10,"ingles":9},
+  {"nombre":"Miguel","apellidos":"Blanco Soto","codigo":"A010","matematicas":6,"lengua":7,"ingles":6},
+  {"nombre":"Carmen","apellidos":"Ibáñez Cruz","codigo":"A011","matematicas":7,"lengua":9,"ingles":8},
+  {"nombre":"Daniel","apellidos":"Molina Fuentes","codigo":"A012","matematicas":5,"lengua":4,"ingles":6},
+  {"nombre":"Isabel","apellidos":"Marín Peña","codigo":"A013","matematicas":8,"lengua":8,"ingles":7},
+  {"nombre":"Raúl","apellidos":"Cordero Vega","codigo":"A014","matematicas":3,"lengua":5,"ingles":4},
+  {"nombre":"Noelia","apellidos":"Caballero León","codigo":"A015","matematicas":10,"lengua":9,"ingles":10},
+  {"nombre":"Alberto","apellidos":"Rivas Aguilar","codigo":"A016","matematicas":6,"lengua":6,"ingles":7},
+  {"nombre":"Paula","apellidos":"Solana Muñoz","codigo":"A017","matematicas":9,"lengua":8,"ingles":8},
+  {"nombre":"Víctor","apellidos":"Gallego Campos","codigo":"A018","matematicas":7,"lengua":6,"ingles":5},
+  {"nombre":"Verónica","apellidos":"Herrera Lozano","codigo":"A019","matematicas":8,"lengua":10,"ingles":9},
+  {"nombre":"Diego","apellidos":"Paredes Rubio","codigo":"A020","matematicas":5,"lengua":7,"ingles":6}
+]
