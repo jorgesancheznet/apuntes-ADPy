@@ -58,6 +58,9 @@
   - [Añadir columnas a DataFrames](#Añadir-columnas-a-DataFrames)
   - [Eliminar filas](#Eliminar-filas)
   - [Trasponer un DataFrame](#Trasponer-un-DataFrame)
+  - [Concatenar DataFrames](#Concatenar-DataFrames)
+  - [Renombrar columnas](#Renombrar-columnas)
+  - [Renombrar índices](#Renombrar-índices)
   - [Operaciones matemáticas](#Operaciones-matemáticas)
   - [Usar cálculos de totales](#Usar-cálculos-de-totales)
   - [Método **agg**](#Método-**agg**)
@@ -1516,7 +1519,6 @@ print("DataFrame con nueva columna 'Departamento':\n", df)
     2  Carlos    29   Valencia   Producción
     3   Marta    42    Sevilla       Ventas
     
-
 ### Eliminar filas
 Podemos eliminar filas utilizando el método `drop()`, especificando el índice de la fila que queremos eliminar y el parámetro `inplace=True` para modificar el DataFrame original (de otro modo se devuelve una copia y el original se deja sin modificar).
 
@@ -1558,6 +1560,88 @@ print("DataFrame traspuesto:\n",df_traspuesto)
     Nombre     Ana       Luis    Carlos    Marta
     Edad        28         34        29       42
     Ciudad  Madrid  Barcelona  Valencia  Sevilla
+    
+
+### Concatenar DataFrames
+Podemos concatenar varios DataFrames utilizando la función `concat()`, que une los DataFrames a lo largo de un eje especificado (filas o columnas). Para especificar el eje, utilizamos el parámetro `axis`, donde `axis=0` concatena por filas (verticalmente) y `axis=1` concatena por columnas (horizontalmente).
+
+
+```python
+df1 = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis'],
+    'Edad': [28, 34],
+    'Ciudad': ['Madrid', 'Barcelona']
+})
+df2 = pd.DataFrame({
+    'Nombre': ['Carlos', 'Marta'],
+    'Edad': [29, 42],
+    'Ciudad': ['Valencia', 'Sevilla']
+})
+# Concatenar por filas (axis=0)
+df_concatenado_filas = pd.concat([df1, df2], axis=0)
+print("DataFrame concatenado por filas:\n",df_concatenado_filas)
+# Concatenar por columnas (axis=1), en este caso no tiene sentido
+df_concatenado_columnas = pd.concat([df1, df2], axis=1)
+print("\nDataFrame concatenado por columnas:\n",df_concatenado_columnas)
+```
+
+    DataFrame concatenado por filas:
+        Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    1    Luis    34  Barcelona
+    0  Carlos    29   Valencia
+    1   Marta    42    Sevilla
+    
+    DataFrame concatenado por columnas:
+       Nombre  Edad     Ciudad  Nombre  Edad    Ciudad
+    0    Ana    28     Madrid  Carlos    29  Valencia
+    1   Luis    34  Barcelona   Marta    42   Sevilla
+    
+
+### Renombrar columnas
+Podemos renombrar las columnas de un DataFrame utilizando el método `rename()`, que permite especificar un diccionario que mapea los nombres antiguos a los nuevos.
+
+Para modificar el DataFrame original, debemos usar el parámetro `inplace=True`. Si no se especifica este parámetro, el método devuelve una copia del DataFrame con las columnas renombradas, dejando el original sin cambios.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+})
+df_renombrado = df.rename(columns={'Nombre': 'Nombre_Completo', 'Edad': 'Años'})
+print("DataFrame con columnas renombradas:\n",df_renombrado)
+```
+
+    DataFrame con columnas renombradas:
+       Nombre_Completo  Años     Ciudad
+    0             Ana    28     Madrid
+    1            Luis    34  Barcelona
+    2          Carlos    29   Valencia
+    3           Marta    42    Sevilla
+    
+
+### Renombrar índices
+Podemos renombrar los índices de un DataFrame utilizando el método `rename()`, que permite especificar un diccionario que mapea los índices antiguos a los nuevos.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+}, index=['id1', 'id2', 'id3', 'id4'])
+df_renombrado = df.rename(index={'id1': 'codigo_1', 'id2': 'codigo_2'})
+print("DataFrame con índices renombrados:\n",df_renombrado)
+```
+
+    DataFrame con índices renombrados:
+               Nombre  Edad     Ciudad
+    codigo_1     Ana    28     Madrid
+    codigo_2    Luis    34  Barcelona
+    id3       Carlos    29   Valencia
+    id4        Marta    42    Sevilla
     
 
 ### Operaciones matemáticas
