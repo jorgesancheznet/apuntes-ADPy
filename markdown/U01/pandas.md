@@ -79,6 +79,17 @@
   - [Propiedad shape](#Propiedad-shape)
   - [Propiedad dtypes](#Propiedad-dtypes)
   - [Propiedad index](#Propiedad-index)
+- [Valores NaN](#Valores-NaN)
+  - [Modificación de valores NaN](#Modificación-de-valores-NaN)
+  - [Eliminación de valores NaN](#Eliminación-de-valores-NaN)
+  - [Detección de valores NaN](#Detección-de-valores-NaN)
+  - [Método notna()](#Método-notna())
+- [Valores duplicados](#Valores-duplicados)
+  - [Método drop_duplicates()](#Método-drop_duplicates())
+  - [Método duplicated()](#Método-duplicated())
+- [Agrupar datos en un DataFrame](#Agrupar-datos-en-un-DataFrame)
+  - [Método groupby()](#Método-groupby())
+  - [Método pivot_table()](#Método-pivot_table())
 
 ## Introducción a la librería pandas
 La librería pandas es una de las herramientas más poderosas y populares en Python para el análisis y manipulación de datos. La palabra "pandas" proviene de "panel data", que se refiere a conjuntos de datos multidimensionales. Pandas proporciona estructuras de datos flexibles y fáciles de usar. Concretamente sus estructuras son:
@@ -1477,6 +1488,49 @@ print("DataFrame con la columna 'Ciudad' eliminada:\n",df)
     3   Marta    42
     
 
+Otra forma de hacerlo es mediante el método `drop`pero utilizand el parámetro columns. Este método devuelve una copia del DataFrame con la columna eliminada, dejando el original sin cambios, a menos que se utilice el parámetro `inplace=True`.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+})
+df.drop(columns=['Ciudad'], inplace=True)
+print("DataFrame con la columna 'Ciudad' eliminada:\n",df)
+```
+
+    DataFrame con la columna 'Ciudad' eliminada:
+        Nombre  Edad
+    0     Ana    28
+    1    Luis    34
+    2  Carlos    29
+    3   Marta    42
+    
+
+Además eñ método `drop`, a diferencia de `del`, permite eliminar varias columnas a la vez.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla'],
+    'Departamento': ['Ventas', 'Producción', 'Producción', 'Ventas']
+})
+df.drop(columns=['Ciudad','Departamento'], inplace=True)
+print("DataFrame con las columnas 'Ciudad' y 'Departamento' eliminadas:\n",df)
+```
+
+    DataFrame con las columnas 'Ciudad' y 'Departamento' eliminadas:
+        Nombre  Edad
+    0     Ana    28
+    1    Luis    34
+    2  Carlos    29
+    3   Marta    42
+    
+
 ### Añadir columnas a DataFrames
 Basta con indicar su nombre entre corchetes e indicar un primer valor con el que se rellenarán todas sus filas
 
@@ -1519,6 +1573,7 @@ print("DataFrame con nueva columna 'Departamento':\n", df)
     2  Carlos    29   Valencia   Producción
     3   Marta    42    Sevilla       Ventas
     
+
 ### Eliminar filas
 Podemos eliminar filas utilizando el método `drop()`, especificando el índice de la fila que queremos eliminar y el parámetro `inplace=True` para modificar el DataFrame original (de otro modo se devuelve una copia y el original se deja sin modificar).
 
@@ -2116,3 +2171,320 @@ print(df.index);
 
     RangeIndex(start=0, stop=4, step=1)
     
+
+
+```python
+print
+```
+
+## Valores NaN y valores duplicados
+Los valores NaN (Not a Number) representan datos faltantes o no disponibles en un DataFrame o Serie de pandas. Estos valores pueden surgir por diversas razones, como datos incompletos, errores en la recopilación de datos o durante el procesamiento de datos.
+Pandas proporciona varias funciones y métodos para manejar los valores NaN, como `isna()`, `fillna()`, `dropna()`, entre otros. Estos métodos permiten identificar, reemplazar o eliminar los valores NaN según las necesidades del análisis de datos
+### Modificación de valores NaN
+El método `fillna()` permite reemplazar los valores NaN (Not a Number) en un DataFrame o Serie con un valor específico o utilizando diferentes métodos de interpolación.
+Para ello se indica el nuevo valor
+El parámetro `inplace=True` permite modificar el DataFrame original en lugar de devolver una copia modificada.
+
+
+```python
+# DataFrame con valores NaN
+df = pd.DataFrame({
+    'A': [1, 2, np.nan, 4],
+    'B': [np.nan, 2, 3, 4],
+    'C': [1, np.nan, np.nan, 4]
+})
+# Reemplazar NaN con un valor específico (por ejemplo, 0)
+df_rellenado = df.fillna(0)
+print("DataFrame con valores NaN reemplazados por 0:\n",df_rellenado)
+```
+
+    DataFrame con valores NaN reemplazados por 0:
+          A    B    C
+    0  1.0  0.0  1.0
+    1  2.0  2.0  0.0
+    2  0.0  3.0  0.0
+    3  4.0  4.0  4.0
+    
+
+### Eliminación valores NaN
+El método `dropna()` permite eliminar filas o columnas que contienen valores NaN en un DataFrame o Serie.
+El parámetro `axis` especifica si se deben eliminar filas (`axis=0`) o columnas (`axis=1`) que contienen NaN.
+El parámetro `inplace=True` permite modificar el DataFrame original en lugar de devolver una copia modificada.
+
+
+```python
+### Eliminar filas o columnas con NaN usando dropna()
+df = pd.DataFrame({
+    'A': [1, 2, np.nan, 4],
+    'B': [1, 2, 3, np.nan],
+    'C': [1, np.nan, np.nan, 4],
+    'D': [1, 2, 3, 4],
+})
+print(df)
+print("-"*50)
+# Eliminar filas con al menos un NaN
+df_sin_filas_nan = df.dropna(axis=0)
+print("DataFrame sin filas con NaN:\n",df_sin_filas_nan)
+print("-"*50)
+# Eliminar columnas con al menos un NaN
+df_sin_columnas_nan = df.dropna(axis=1)
+print("\nDataFrame sin columnas con NaN:\n",df_sin_columnas_nan)
+```
+
+         A    B    C  D
+    0  1.0  1.0  1.0  1
+    1  2.0  2.0  NaN  2
+    2  NaN  3.0  NaN  3
+    3  4.0  NaN  4.0  4
+    --------------------------------------------------
+    DataFrame sin filas con NaN:
+          A    B    C  D
+    0  1.0  1.0  1.0  1
+    
+    DataFrame sin columnas con NaN:
+        D
+    0  1
+    1  2
+    2  3
+    3  4
+    
+
+### Detección de valores NaN
+El método `isna()` devuelve un DataFrame o una Serie de valores booleanos que indican si cada elemento de la misma posee el valor NaN (en cuyo caso devuelve `True`) o no (devolvería `False`).
+
+
+```python
+df = pd.DataFrame({
+    'A': [1, 2, np.nan, 4],
+    'B': [np.nan, 2, 3, 4],
+    'C': [1, np.nan, np.nan, 4]
+})
+# Obtener un DataFrame booleano indicando la presencia de NaN
+df_isna = df.isna()
+print("DataFrame booleano indicando la presencia de NaN:\n",df_isna)
+```
+
+    DataFrame booleano indicando la presencia de NaN:
+            A      B      C
+    0  False   True  False
+    1  False  False   True
+    2   True  False   True
+    3  False  False  False
+    
+
+### Método notna()
+El método `notna()` es el opuesto de `isna()`. Devuelve un DataFrame o una Serie de valores booleanos que indican si cada elemento no es NaN (en cuyo caso devuelve `True`) o es NaN (devolvería `False`).
+
+
+```python
+df  = pd.DataFrame({
+    'A': [1, 2, np.nan, 4],
+    'B': [np.nan, 2, 3, 4],
+    'C': [1, np.nan, np.nan, 4]
+})
+# Obtener un DataFrame booleano indicando la ausencia de NaN
+df_notna = df.notna()
+print("DataFrame booleano indicando la ausencia de NaN:\n",df_notna)
+```
+
+    DataFrame booleano indicando la ausencia de NaN:
+            A      B      C
+    0   True  False   True
+    1   True   True  False
+    2  False   True  False
+    3   True   True   True
+    
+
+## Valores duplicados
+### Método drop_duplicates()
+El método `drop_duplicates()` permite eliminar filas duplicadas en un DataFrame, manteniendo solo la primera aparición de cada fila duplicada.
+El parámetro `inplace=True` permite modificar el DataFrame original en lugar de devolver una copia modificada.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta', 'Ana'],
+    'Edad': [28, 34, 29, 42, 28],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Madrid']
+})
+# Eliminar filas duplicadas
+print("DataFrame original con filas duplicadas:\n",df)
+print("-"*50)
+df_sin_duplicados = df.drop_duplicates()
+print("DataFrame sin filas duplicadas:\n",df_sin_duplicados)
+```
+
+    DataFrame original con filas duplicadas:
+        Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    1    Luis    34  Barcelona
+    2  Carlos    29   Valencia
+    3   Marta    42    Sevilla
+    4     Ana    28     Madrid
+    --------------------------------------------------
+    DataFrame sin filas duplicadas:
+        Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    1    Luis    34  Barcelona
+    2  Carlos    29   Valencia
+    3   Marta    42    Sevilla
+    
+
+### Método duplicated()
+El método `duplicated()` devuelve una Serie de valores booleanos que indican si cada fila en el DataFrame es un duplicado de una fila anterior.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta', 'Ana'],
+    'Edad': [28, 34, 29, 42, 28],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Madrid']
+})
+# Obtener una Serie booleana indicando filas duplicadas
+filas_duplicadas = df.duplicated()
+print("Serie booleana indicando filas duplicadas:\n",filas_duplicadas)
+```
+
+    Serie booleana indicando filas duplicadas:
+     0    False
+    1    False
+    2    False
+    3    False
+    4     True
+    dtype: bool
+    
+
+## Agrupar datos en un DataFrame
+### Método groupby()
+El método `groupby()` permite agrupar los datos de un DataFrame según una o más columnas y aplicar funciones de agregación a cada grupo.
+La forma de hacerlo es indicar la columna o columnas por las que se quiere agrupar y luego aplicar una función de agregación como `sum()`, `mean()`, `count()`, etc.
+
+
+
+```python
+df = pd.DataFrame({
+    'Departamento': ['Ventas', 'Ventas', 'Producción', 'Producción', 'Ventas'],
+    'Empleado': ['Ana', 'Luis', 'Carlos', 'Marta', 'Eva'],
+    'Ventas': [1200.5, 650., 1860.5, 930.2, 1450.3]
+})
+# Agrupar por departamento y calcular la suma de ventas por departamento
+ventas_por_departamento = df.groupby('Departamento')["Ventas"].sum()
+print("Suma de ventas por departamento:\n",ventas_por_departamento)
+```
+
+    Suma de ventas por departamento:
+                      Empleado  Ventas
+    Departamento                     
+    Producción    CarlosMarta  2790.7
+    Ventas         AnaLuisEva  3300.8
+    
+
+Mediante `agg` se pueden realizar varios cálculos a la vez
+
+
+```python
+df = pd.DataFrame({
+    'Departamento': ['Ventas', 'Ventas', 'Producción', 'Producción', 'Ventas'],
+    'Empleado': ['Ana', 'Luis', 'Carlos', 'Marta', 'Eva'],
+    'Ventas': [1200.5, 650., 1860.5, 930.2, 1450.3]
+})
+# Agrupar por departamento y calcular varios totales de ventas por departamento
+ventas_por_departamento = df.groupby('Departamento')["Ventas"].agg(['sum','mean','max'])
+# cambiar el nombre de las columnas resultantes
+ventas_por_departamento.columns = ['Total_Ventas','Media_Ventas','Max_Ventas']
+print("Totales de ventas por departamento:\n",ventas_por_departamento)
+```
+
+    Totales de ventas por departamento:
+                   Total_Ventas  Media_Ventas  Max_Ventas
+    Departamento                                        
+    Producción          2790.7   1395.350000      1860.5
+    Ventas              3300.8   1100.266667      1450.3
+    
+
+Se puede resetear el índice para que no aparezca el nombre del grupo como índice
+
+
+```python
+df = pd.DataFrame({
+    'Departamento': ['Ventas', 'Ventas', 'Producción', 'Producción', 'Ventas'],
+    'Empleado': ['Ana', 'Luis', 'Carlos', 'Marta', 'Eva'],
+    'Ventas': [1200.5, 650., 1860.5, 930.2, 1450.3]
+})
+# Agrupar por departamento y calcular varios totales de ventas por departamento
+ventas_por_departamento = df.groupby('Departamento')["Ventas"].agg(['sum','mean','max']).reset_index()
+print("Totales de ventas por departamento:\n",ventas_por_departamento)
+```
+
+    Totales de ventas por departamento:
+       Departamento     sum         mean     max
+    0   Producción  2790.7  1395.350000  1860.5
+    1       Ventas  3300.8  1100.266667  1450.3
+    
+
+También podemos agrupar, pero sin aplicar ninguna función de agregación, lo que nos devolverá un DataFrame con los grupos formados.
+Lo que devuelve `groupby()` es un objeto `DataFrameGroupBy`, que es un objeto intermedio que representa los grupos formados. Podemos iterar sobre este objeto para acceder a cada grupo individualmente. Durante la iteración, obtenemos una tupla que contiene el nombre del grupo y el DataFrame correspondiente a ese grupo.
+
+
+```python
+df = pd.DataFrame({
+    'Departamento': ['Ventas', 'Ventas', 'Producción', 'Producción', 'Ventas'],
+    'Empleado': ['Ana', 'Luis', 'Carlos', 'Marta', 'Eva'],
+    'Ventas': [1200.5, 650., 1860.5, 930.2, 1450.3]
+})
+# Agrupar por departamento sin aplicar función de agregación
+grupos = df.groupby('Departamento')
+for nombre_grupo, grupo in grupos:
+    print(f"\nGrupo: {nombre_grupo}\n", grupo)
+```
+
+    <pandas.core.groupby.generic.DataFrameGroupBy object at 0x00000163024BA110>
+    
+    Grupo: Producción
+       Departamento Empleado  Ventas
+    2   Producción   Carlos  1860.5
+    3   Producción    Marta   930.2
+    
+    Grupo: Ventas
+       Departamento Empleado  Ventas
+    0       Ventas      Ana  1200.5
+    1       Ventas     Luis   650.0
+    4       Ventas      Eva  1450.3
+    
+
+### Método pivot_table()
+El método `pivot_table()` permite crear tablas dinámicas a partir de un DataFrame, resumiendo los datos mediante funciones de agregación.
+La ventaja de las tablas dinámicas es que permiten reorganizar y resumir los datos de manera flexible, facilitando el análisis y la visualización de la información.
+Los parámetros de `pivot_table()` son:
+- `values`: La columna cuyos valores se van a agregar.
+- `index`: Las columnas que se utilizarán como índices (filas) en la tabla dinámica.
+- `columns`: Las columnas que se utilizarán como columnas en la tabla dinámica.
+- `aggfunc`: La función de agregación que se aplicará a los valores (por defecto es `mean`).
+- `fill_value`: Un valor para reemplazar los valores NaN en la tabla dinámica.
+- `margins`: Si es `True`, agrega totales para filas y columnas.
+- `margins_name`: El nombre que se utilizará para los totales si `margins` es `True`.
+- `dropna`: Si es `True`, elimina las columnas que contienen solo valores NaN.
+- `sort`: Si es `True`, ordena las columnas de la tabla dinámica.
+- `observed`: Si es `True`, solo incluye las combinaciones observadas de categorías en la tabla dinámica (útil para datos categóricos).
+
+
+```python
+df = pd.DataFrame({
+    'Departamento': ['Ventas', 'Ventas', 'Producción', 'Producción', 'Ventas'],
+    'Empleado': ['Ana', 'Luis', 'Carlos', 'Marta', 'Eva'],
+    'Mes': ['Enero', 'Febrero', 'Enero', 'Febrero', 'Enero'],
+    'Ventas': [1200.5, 650., 1860.5, 930.2, 1450.3]
+})
+# Crear una tabla dinámica que muestre la suma de ventas por departamento y mes
+tabla_dinamica = df.pivot_table(values='Ventas', index='Departamento', columns='Mes', aggfunc='sum', fill_value=0)
+print("Tabla dinámica de ventas por departamento y mes:\n",tabla_dinamica)
+```
+
+    Tabla dinámica de ventas por departamento y mes:
+     Mes            Enero  Febrero
+    Departamento                 
+    Producción    1860.5    930.2
+    Ventas        2650.8    650.0
+    
+
+
