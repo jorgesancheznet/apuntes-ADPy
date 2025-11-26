@@ -14,7 +14,10 @@
     - [Creación de arrays vacíos](#creación-de-arrays-vacíos)
     - [Creación de arrays con valores aleatorios](#creación-de-arrays-con-valores-aleatorios)
 - [Acceso y modificación de elementos](#acceso-y-modificación-de-elementos)
-    - [Acceder a un elemento](#acceder-a-un-elemento)
+    - [Acceso a un elemento](#acceso-a-un-elemento)
+    - [Modificación de elementos](#modificación-de-elementos)
+    - [Arrays multidimensionales](#arrays-multidimensionales)
+    - [Valores negativos en los índices](#valores-negativos-en-los-índices)
 - [Tipos de datos numéricos de los arrays](#tipos-de-datos-numéricos-de-los-arrays)
     - [Tipos de datos específicos de los arrays de NumPy](#tipos-de-datos-específicos-de-los-arrays-de-numpy)
     - [Propiedad dtype](#propiedad-dtype)
@@ -44,9 +47,7 @@ Es imprescindible ejecutar esta línea para poder ejecutar cualquiera de las cel
 import numpy as np # Siempre hay que ejecutar este código antes de poder ejecutar el resto de celdas
 ```
 
-
-
-## Características de los arrays
+## Características de los array
 Los arrays de NumPy son estructuras de datos fundamentales para computación científica en Python:
 
 ### Características principales:
@@ -81,6 +82,7 @@ No pueden contener tipos de datos mixtos de forma eficiente (a diferencia de las
 ## Creación a partir de colecciones
 
 ### Creación desde una lista
+Para ello se utiliza la función `np.array()`, pasando como argumento una lista de Python. 
 
 
 ```python
@@ -92,6 +94,7 @@ print(a)
 
 
 ### Creación desde una tupla
+Similar a las listas, se puede crear un array a partir de una tupla utilizando la función `np.array()`.
 
 
 ```python
@@ -102,6 +105,7 @@ print(a)
     [10 20 30 40 50]
 
 
+### Datos heterogéneos
 Los datos deben de ser homogéneos. Si hay arrays y strings combinados, todos los datos se convierten a strings
 
 
@@ -113,12 +117,9 @@ print(a)
     ['10' '20' 'Hola' '40' 'True' '2.9']
 
 
-
-```python
-
-```
-
 ## Crear arrays desde rangos de números
+### Método `arange()`
+La función `np.arange()` crea un array con valores en un rango especificado, similar a la función `range()` de Python, pero devuelve un array de NumPy.
 
 
 ```python
@@ -137,6 +138,7 @@ print(c)
     [10  9  8  7  6  5  4  3  2]
 
 
+### Método `linspace()`
 El método linspace crea arrays desde un rango, pero en este caso indica el rango y el número de elementos que deseamos
 
 
@@ -156,6 +158,8 @@ print(b) # 51 valores entre 1 y 101 separados por la misma cantidad
 
 
 ### Relleno de arrays con un mismo valor
+#### Rellenao de ceros
+La función `np.zeros()` crea un array lleno de ceros. Para ello se indica el tamaño del array que se desea rellenar.
 
 
 ```python
@@ -166,7 +170,8 @@ print(a)
     [0. 0. 0. 0. 0.]
 
 
-Relleno de unos
+#### Relleno de unos
+La función `np.ones()` crea un array lleno de unos. Para ello se indica el tamaño del array que se desea rellenar.
 
 
 ```python
@@ -177,7 +182,8 @@ print(a)
     [1. 1. 1. 1. 1.]
 
 
-Rellenar de un valor cualquiera
+#### Rellenar de un valor cualquiera
+La función `np.full()` crea un array lleno de un valor específico. Se indica el tamaño del array y el valor con el que se desea rellenar.
 
 
 ```python
@@ -188,11 +194,15 @@ print(a)
     [6 6 6 6 6]
 
 
-Arrays de varias dimensiones rellenos con un mismo valor
+### Relleno de arrays multidimensionales
+Para rellenar arrays multidimensionales con un mismo valor, se puede utilizar las funciones `np.zeros()`, `np.ones()` o `np.full()` especificando una tupla que indique las dimensiones del array deseado.
 
 
 ```python
 a = np.zeros((3,4)) # Array de 3 filas y 4 columnas relleno de ceros
+print(a)
+
+a = np.ones((2,5)) # Array de 2 filas y 5 columnas relleno de unos
 print(a)
 
 b = np.full((2,5),9) # Array de 2 filas y 5 columnas relleno de nueves
@@ -202,6 +212,8 @@ print(b)
     [[0. 0. 0. 0.]
      [0. 0. 0. 0.]
      [0. 0. 0. 0.]]
+    [[1. 1. 1. 1. 1.]
+     [1. 1. 1. 1. 1.]]
     [[9 9 9 9 9]
      [9 9 9 9 9]]
 
@@ -239,7 +251,7 @@ print(a)
      [11 35 80 55]]
 
 
-### random
+### Método `random`
 Genera un array con valores decimales aleatorios entre 0 y 1
 
 
@@ -282,7 +294,7 @@ Otras funciones son:
 * **permutation(x)**: Devuelve una permutación aleatoria de los elementos del array *x*
 
 ### Cambio de la semilla
-El módulo random permite establecer una semilla para el generador de números aleatorios. La semilla es el valor inicial que se utiliza para generar la secuencia de números aleatorios. Si se establece la misma semilla, se obtendrá la misma secuencia de números aleatorios cada vez que se ejecute el código.
+El módulo `random` permite establecer una semilla para el generador de números aleatorios. La semilla es el valor inicial que se utiliza para generar la secuencia de números aleatorios. Si se establece la misma semilla, se obtendrá la misma secuencia de números aleatorios cada vez que se ejecute el código.
 El método **seed** permite establecer la semilla.
 
 
@@ -297,6 +309,8 @@ Para ello se utiliza el método **default_rng** que crea un generador de número
 Los generadores aportan métodos para crear arrays con diferentes distribuciones de probabilidad.
 
 
+
+
 ```python
 rng = np.random.default_rng(42) # Crea un generador con semilla 42
 a = rng.integers(1,10,5) # 5 valores enteros aleatorios entre 1 y 9
@@ -307,10 +321,17 @@ a = rng.normal(0,1,(2,3)) # Array de 2 filas y 3 columnas con distribución norm
 print(a)
 ```
 
+    [1 7 6 4 4]
+    [[0.69736803 0.09417735 0.97562235]
+     [0.7611397  0.78606431 0.12811363]]
+    [[-0.85304393  0.87939797  0.77779194]
+     [ 0.0660307   1.12724121  0.46750934]]
+
+
 # Acceso y modificación de elementos
 
-## Acceder a un elemento
-Se puede acceder utilizando índices, empezando por 0. El índice se usa entre corchetes []. Para arrays multidimensionales, se usan comas para separar los índices de cada dimensión.
+## Acceso a un elemento
+Se puede acceder a un elemento concreto del array a través de su índice. El primer elemento tendrá índice 0, el siguiente 1 y así sucesivamente. El índice se indica entre corchetes []. 
 
 
 ```python
@@ -321,19 +342,20 @@ print(a[2]) # Escribe 30
     30
 
 
-Los arrays son mutables, podemos cambiar el valor de los elementos
+## Modificación de elementos
+Los arrays son mutables, se puede modificar el valor de cada elemento.
 
 
 ```python
 a[2] = 90
 print(a) # Escribe [10 20 90 40 50]
-
 ```
 
     [10 20 90 40 50]
 
 
-Acceso a elementos en arrays multidimensionales
+## Arrays multidimensionales
+En el caso de los arrays multidimensionales, se utilizan comas para separar los índices de cada dimensión.
 
 
 ```python
@@ -341,12 +363,12 @@ a = np.array([[10,20,30,40],
               [50,60,70,80],
               [90,100,110,120]])
 print(a[1,2]) # Accede a la segunda fila, tercera columna (valor 70)
-
 ```
 
     70
 
 
+## Valores negativos en los índices
 Podemos usar valores negativos en los índices para contar desde el final
 
 
@@ -380,7 +402,7 @@ print(a.dtype) # Escribe el tipo entero por defecto, int64 o int32 según el sis
     int64
 
 
-m## Tipos de datos numéricos en NumPy
+## Tipos de datos numéricos en NumPy
 ### Enteros
 | **Tipo**   | **Valores**                                                  | **Rango**        |
 | ---------- | ------------------------------------------------------------ | ---------------- |
@@ -431,7 +453,7 @@ print(array)
 
 # Propiedades de los arrays
 ## size
-Indica el tamaño de un array
+Indica el tamaño de un array, contando el número total de elementos que contiene.
 
 
 ```python
@@ -462,7 +484,7 @@ print(b.ndim) # Escribe 2, dos dimensiones
 
 
 ## shape
-Indica la forma del array, es decir, el número de elementos en cada dimensión. Es más completo que size y ndim
+Indica la forma del array, es decir, el número de elementos en cada dimensión. Es más completo que size y ndim. Devuelve los datos en forma de tupla.
 
 
 ```python
@@ -644,7 +666,7 @@ print("a>5 -> ",a>5) # Devuelve un array de booleanos con valores
     a>5 ->  [False False False False False  True  True  True  True  True]
 
 
-Podemos, con ayuda de ese tipo de resultado, filtrar los elementos del array original de modo que se muestren solo los elementos que cumplen la condición
+Podemos, con ayuda de ese tipo de resultado, filtrar los elementos del array original de modo que se muestren solo los elementos que cumplen la condición. Para ello el array de booleanos se utiliza como índice del array original.
 
 
 ```python
@@ -793,7 +815,7 @@ print("Array 'b' tras b = a * 2:\n",b)
      [184 224 264]]
 
 
-Es posible incluso aplicar operaciones de asignación
+El operador de asignación permite aplicar operaciones de asignación compuestas (como +=, -=, *=, /=) directamente sobre los arrays, modificando sus elementos in situ sin necesidad de crear un nuevo array.
 
 
 ```python
@@ -812,7 +834,7 @@ print("Array 'a' tras a *= 2:\n",a)
 
 
 ### Funciones matemáticas
-NumPy proporciona una amplia gama de funciones matemáticas que se aplican a cada elemento del array.
+NumPy proporciona una amplia gama de funciones matemáticas que se aplican a cada elemento del array. Estas funciones incluyen funciones trigonométricas, exponenciales, logarítmicas, entre otras. 
 
 
 ```python
@@ -857,8 +879,15 @@ print("Tangente de a:\n",np.tan(a))
 
 
 ## Operaciones de cálculo de totales
-Se pueden utilizar operaciones para calcular totales, medias, mínimos, máximos, etc.
+NumPy aporta también funciones para calcular totales, medias, mínimos, máximos, etc. Concretamente disponemos de:
+- `np.sum()`: Calcula la suma de todos los elementos del array.
+- `np.mean()`: Calcula la media aritmética de los elementos del array.
+- `np.min()`: Devuelve el valor mínimo del array.
+- `np.max()`: Devuelve el valor máximo del array.
+- `np.std()`: Calcula la desviación estándar de los elementos del array.
+- `np.var()`: Calcula la varianza de los elementos del array.
 
+En el caso de necesitar contar elementos, se puede usar la función `np.count_nonzero()`, que cuenta el número de elementos no nulos en el array.
 
 
 ```python
@@ -899,9 +928,32 @@ print("Algún valor verdadero en a > 50:\n", np.any(a > 50))
      True
 
 
+### Totales por filas o columnas
+Las funciones de cálculo de totales permiten especificar el eje (filas o columnas) sobre el que se desea realizar la operación, utilizando el parámetro `axis`. 
+- `axis=0`: Operación a lo largo de las columnas (por filas)
+- `axis=1`: Operación a lo largo de las filas (por columnas)
+
+
+```python
+a = np.array([[10,20,30],[40,50,60],[70,80,90]])
+print("Array original, a:\n",a)
+print("Suma por columnas (axis=0):\n", np.sum(a, axis=0))
+print("Suma por filas (axis=1):\n", np.sum(a, axis=1))
+```
+
+    Array original, a:
+     [[10 20 30]
+     [40 50 60]
+     [70 80 90]]
+    Suma por columnas (axis=0):
+     [120 150 180]
+    Suma por filas (axis=1):
+     [ 60 150 240]
+
+
 ## Otras operaciones útiles
 ### Concatenación
-Se pueden concatenar varios arrays en uno solo usando la función concatenate().
+Se realiza con la función `np.concatenate()`, que une dos o más arrays a lo largo de un eje especificado.
 
 
 ```python
@@ -1063,6 +1115,11 @@ print("x:\n",x)
 
 ### Operaciones de conjuntos
 Se pueden realizar operaciones de conjuntos como unión, intersección y diferencia utilizando funciones específicas de NumPy.
+Concretamente se dispone de:
+- `np.union1d()`: Calcula la unión de dos arrays, devolviendo un array con los elementos únicos presentes en ambos arrays.
+- `np.intersect1d()`: Calcula la intersección de dos arrays, devolviendo un array con los elementos comunes a ambos arrays.
+- `np.setdiff1d()`: Calcula la diferencia entre dos arrays, devolviendo un array con los elementos que están en el primer array pero no en el segundo.
+- `np.setxor1d()`: Calcula la diferencia simétrica entre dos arrays, devolviendo un array con los elementos que están en uno u otro array, pero no en ambos.
 
 
 ```python
@@ -1124,8 +1181,25 @@ print("Operación xor simétrica (filas en a o b pero no en ambos):\n",np.setxor
      [1 2 7 8]
 
 
+### Eliminación de elementos duplicados
+La función `np.unique()` permite eliminar los elementos duplicados de un array, devolviendo un array con los elementos únicos.
+
+
+```python
+array = np.array([1,2,2,3,4,4,5,5,5])
+print("Array original:\n",array)
+print("Array sin duplicados:\n",np.unique(array))
+```
+
+    Array original:
+     [1 2 2 3 4 4 5 5 5]
+    Array sin duplicados:
+     [1 2 3 4 5]
+
+
 ### Ordenar arrays
-El método **sort** permite ordenar los elementos de un array. Por defecto, ordena en orden ascendente.
+#### Método `sort()`
+El método `sort` permite ordenar los elementos de un array. Por defecto, ordena en orden ascendente.
 
 
 ```python
@@ -1141,7 +1215,32 @@ print("Array a ordenado:\n",a)
      [1 2 4 4 5 7 8]
 
 
-El método **argsort** devuelve los índices que ordenarían el array. No modifica el array original.
+Podemos especificar el parámetro `axis` para ordenar a lo largo de un eje específico en arrays multidimensionales.
+
+
+```python
+array = np.array([[30,60,10],[50,20,40]])
+print("Array original:\n",array)
+array.sort(axis=0) # Ordena cada columna
+print("Array ordenado por columnas (axis=0):\n",array)
+array = np.array([[30,60,10],[50,20,40]])
+array.sort(axis=1) # Ordena cada fila
+print("Array ordenado por filas (axis=1):\n",array)
+```
+
+    Array original:
+     [[30 60 10]
+     [50 20 40]]
+    Array ordenado por columnas (axis=0):
+     [[30 20 10]
+     [50 60 40]]
+    Array ordenado por filas (axis=1):
+     [[10 30 60]
+     [20 40 50]]
+
+
+#### Método `argsort()`
+El método `argsort` devuelve los índices que ordenarían el array. No modifica el array original.
 
 
 ```python
@@ -1158,32 +1257,4 @@ print("Array a ordenado usando los índices:\n",a[i])
      [6 4 0 2 5 3 1]
     Array a ordenado usando los índices:
      [1 2 4 4 5 7 8]
-
-
-En los arrays multidimensionales, también funciona el mñetodo sort, pero se puede especificar el eje (filas o columnas) por el que se desea ordenar utilizando el parámetro axis. A este parámetro se le puede asignar el valor 0 (ordenar por columnas) o 1 (ordenar por filas). Si no se especifica, ordena por filas (axis=1)
-
-
-```python
-a = np.array([[6,8,4],
-              [3,2,7],
-              [9,3,1]])
-print("Array a:\n",a)
-b = a.copy() # copia para no perder los datos originales
-b.sort()
-print("Array b ordenado tal cual (ordena por filas)",b)
-b = a.copy()
-print("Array b ordenado por columnas (axis=0):\n",np.sort(b,axis=0))
-```
-
-    Array a:
-     [[6 8 4]
-     [3 2 7]
-     [9 3 1]]
-    Array b ordenado tal cual (ordena por filas) [[4 6 8]
-     [2 3 7]
-     [1 3 9]]
-    Array b ordenado por columnas (axis=0):
-     [[3 2 1]
-     [6 3 4]
-     [9 8 7]]
 
