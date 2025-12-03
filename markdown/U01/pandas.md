@@ -92,12 +92,11 @@
   - [Método pivot_table()](#Método-pivot_table())
 
 ## Introducción a la librería pandas
-La librería pandas es una de las herramientas más poderosas y populares en Python para el análisis y manipulación de datos. La palabra "pandas" proviene de "panel data", que se refiere a conjuntos de datos multidimensionales. Pandas proporciona estructuras de datos flexibles y fáciles de usar. Concretamente sus estructuras son:
-* **Series**. Es una estructura de datos unidimensional que puede almacenar datos de diferentes tipos (como enteros, cadenas, flotantes, etc.) y se utiliza para representar una sola columna o fila de datos.
+La librería pandas es una de las herramientas más poderosas y populares en Python para el análisis y manipulación de datos. La palabra "pandas" procede del término *"panel data"*, que se refiere a conjuntos de datos multidimensionales. 
+Pandas proporciona estructuras de datos flexibles y fáciles de usar. Concretamente sus estructuras son:
+* **Serie**. Es una estructura de datos unidimensional que almacena datos de manera similar a un array, pero con etiquetas de índice asociadas a cada valor. Los valores de una misma serie tienen el mismo tipo de dato.
 * **DataFrame**.  Se trata de una estructura de datos bidimensional, similar a una tabla, que permite almacenar y manipular datos de manera eficiente.
-
-* **Índice**. Es una estructura que se utiliza para etiquetar y organizar los datos en pandas, permitiendo un acceso rápido y eficiente a los datos.
-
+* * **Índice**. Es una estructura que se utiliza para etiquetar y organizar los datos en pandas, permitiendo un acceso rápido y eficiente a los datos. Sirve para identificar de manera única las filas o columnas en una Serie o un DataFrame.
 
 ### Importación de la librería
 Para que funcione pandas, primero debemos importarla en nuestro entorno de trabajo. La convención común es importar pandas con el alias **pd**.
@@ -109,6 +108,7 @@ import pandas as pd
 import numpy as np ## Librería necesaria para crear arrays de NumPy
 ```
 
+# Series
 ## Creación de Series
 ### ¿Qué es una Serie?
 Se trata de la estructura básica para contener datos en pandas. Una Serie es una estructura de datos unidimensional cuyos datos están emparejados con un índice, que permite acceder a los datos de manera eficiente.
