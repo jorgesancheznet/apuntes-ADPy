@@ -9,3 +9,8 @@ Profesor: Jorge Sánchez Asenjo
 ## [Unidad 01 - Lectura y escritura de datos con NumPy y Pandas](markdown/U01/README.md)
 - [Arrays de NumPy](markdown/U01/Arrays_NumPy.md)
 - [DataFrames de Pandas](markdown/U01/pandas.md)
+
+## [Unidad 02 - Manejo de bases de datos](markdown/U02/README.md)
+- [Introducción a los sistemas de bases de datos](markdown/U02/introduccion_bd.md)
+- [Introducción a SQLite](markdown/U02/sqlite.md)
+- [Introducción a MySQL](markdown/U02/mysql.md)
