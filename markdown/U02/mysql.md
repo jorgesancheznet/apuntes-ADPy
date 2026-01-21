@@ -1,4 +1,16 @@
 # Uso de MySQL
+## Índice
+- [Características principales](#características-principales)
+- [Instalación de MySQL](#instalación-de-mysql)
+  - [Descarga](#descarga)
+  - [Instalación de la versión ZIP](#instalación-de-la-versión-zip)
+  - [Conectar con MySQL](#conectar-con-mysql)
+  - [Crear usuarios](#crear-usuarios)
+- [Librerías de Python para MySQL](#librerías-de-python-para-mysql)
+- [Conexión con MySQL desde Python](#conexión-con-mysql-desde-python)
+  - [Ejecución de instrucciones](#ejecución-de-instrucciones)
+
+
 ## Características principales
 MySQL es un Sistema Gestor de Bases de Datos completo. Es uno de los más utilizados en el mundo del desarrollo de aplicaciones por su versatilidad, velocidad y facilidad de aprendizaje.
 
@@ -62,10 +74,6 @@ mysql -u prueba -p
 ```
 Y después escribiremos la contraseña
 
-
-
-
-
 ## Librerías de Python para MySQL
 En análisis de datos se utiliza principalmente `pandas` para cargar datos desde MySQL, pero existen otras librerías que permiten conectar con MySQL desde Python. Pero se usan también librerías de Python para gestionar las conexiones.
 
@@ -78,7 +86,7 @@ Estas tres librerías se deben instala mediante `pip` o bien instalarse en un en
 
 Lo normal para usar `pandas`con MySQL es utilizar `SQLAlchemy` y `PyMySQL` porque `pandas` no tiene soporte nativo para MySQL.
 
-### Conexión con MySQL desde Python
+## Conexión con MySQL desde Python
 Necesiotamos importar la librería `pymysql` y utilizar el método `connect`. Este método requiere estos parámetros:
 * **host**. Que sirve para indicar el nombre del servidor donde está la base de datos. Si es local se indica `localhost`.
 * **user**. Nombre del usuario con el que se conecta a la base de datos.
@@ -86,43 +94,25 @@ Necesiotamos importar la librería `pymysql` y utilizar el método `connect`. Es
 * **database**. Nombre de la base de datos a la que se conecta.
 * **port**. Puerto de conexión. Por defecto es el 3306.
 
-```sql
-# Ejemplo de conexión con PyMySQL
+Ejemplo de conexión con PyMySQL
+
+
+```python
 import pymysql
+# Hay que usar el usuario y contraseña dsel que dispongamos en MySQL
 connection = pymysql.connect(host='localhost', user='prueba`', password='A12345', database='prueba')
 ```
 
+
 ### Ejecución de instrucciones
 Se realiza creando un cursor y utilizando el método `execute` del cursor. Por ejemplo:
-```sql
+
+
+```python
+# Hay que usar las tablas que tengamos en MySQL
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM tabla")
 results = cursor.fetchall()
 for row in results:
     print(row)
-```
-### Conexión mediante `sqlalchemy`
-Es la opción reccomendada para usar `pandas` con MySQL. Primero se debe crear un motor de conexión con `create_engine` y después se puede usar `pandas.read_sql` para ejecutar consultas SQL y cargar los resultados en un DataFrame.
-Ejemplo de conexión_
-```
-from sqlalchemy import create_engine
-import pandas as pd
-engine = create_engine('mysql+pymysql://prueba:A12345@localhost/prueba')
-```
-### Leer datos de MySQL con `pandas`
-Se realiza mediante el método `read_sql` de `pandas`. Por ejemplo (usando el objeto `engine` creado antes):
-```sql
-df = pd.read_sql("SELECT * FROM tabla", con=engine)
-```
-
-### Escribir datos en MySQL con `pandas`
-Se utiliza el método `to_sql` de `pandas`. Por ejemplo:
-```sql
-df.to_sql('tabla', con=engine, if_exists='replace', index=False)
-```
-
-
-
-```python
-
 ```

@@ -1,4 +1,27 @@
 # Uso de SQLite
+## Índice
+- [Características principales](#características-principales)
+- [Conexión a una base de datos SQLite en Python](#conexión-a-una-base-de-datos-sqlite-en-python)
+  - [Creación automática de la base de datos](#creación-automática-de-la-base-de-datos)
+  - [Apertura de una base de datos existente](#apertura-de-una-base-de-datos-existente)
+  - [Conexión en memoria](#conexión-en-memoria)
+  - [Cierre de la conexión](#cierre-de-la-conexión)
+- [Uso de cursores para ejecutar consultas SQL](#uso-de-cursor-para-ejecutar-consultas-sql)
+  - [Creación de un cursor](#creación-de-un-cursor)
+- [Ejecución de instrucciones SQL](#ejecución-de-instrucciones-sql)
+  - [Inserción de datos](#inserción-de-datos)
+- [Modificación de datos](#modificación-de-datos)
+- [Eliminación de datos](#eliminación-de-datos)
+  - [Commit y rollback](#commit-y-rollback)
+- [Consulta de datos](#consulta-de-datos)
+  - [Recuperar todos los resultados](#recuperar-todos-los-resultados)
+  - [Obtener un solo resultado](#obtener-un-solo-resultado)
+  - [Iteración directa sobre el cursor de resultados](#iteración-directa-sobre-el-cursor-de-resultados)
+- [Transacciones](#transacciones)
+  - [Commit](#commit)
+  - [Rollback](#rollback)
+- [Gestión de errores](#gestión-de-errores)
+
 ## Características principales
 SQLite es uno de los sistemas de gestión de bases de datos relacionales (RDBMS) más populares y ampliamente utilizados en el mundo.
 Es una base de datos embebida y eso facilita su portabilidad y falta de requerimientos de configuración compleja. A continuación, se presentan algunas de sus características principales.
@@ -98,7 +121,7 @@ except sqlite3.OperationalError as e:
 ```
 
     Error al crear la tabla: table clientes already exists
-
+    
 
 ## Inserción de datos
 Después de crear una tabla, se pueden insertar datos utilizando la instrucción `INSERT INTO`.
@@ -126,7 +149,7 @@ print("Número de filas afectadas:", cursor.rowcount)
 ```
 
     Número de filas afectadas: 1
-
+    
 
 También se puede utilizar un diccionario para mapear los nombres de las columnas a los valores correspondientes, lo que mejora la legibilidad del código y reduce el riesgo de errores al insertar datos en tablas con muchas columnas.
 
@@ -252,7 +275,7 @@ for fila in filas:
     (17, 'Diego', 'Torres')
     (18, 'Elena', 'Vega')
     (19, 'Andrés', 'Rojo')
-
+    
 
 ### Obtener un solo resultado
 El método `fetchone()` recupera una sola fila a la vez. SI ya no hay más filas, devuelve `None`.
@@ -285,7 +308,7 @@ while fila is not None:
     (17, 'Diego', 'Torres')
     (18, 'Elena', 'Vega')
     (19, 'Andrés', 'Rojo')
-
+    
 
 ### Iteración directa sobre el cursor de resultados
 También se puede iterar directamente sobre el cursor después de ejecutar una consulta `SELECT`.
@@ -314,7 +337,7 @@ for fila in cursor.execute("SELECT * FROM clientes"):
     (17, 'Diego', 'Torres')
     (18, 'Elena', 'Vega')
     (19, 'Andrés', 'Rojo')
-
+    
 
 Es fácil transoformar los resultados en un formato más legible, como diccionarios, listas de listas, DataFrames de pandas, etc.
 
@@ -360,100 +383,4 @@ except sqlite3.Error as e:
 ```
 
     Error: Clave duplicada
-
-
-# Integración básica con pandas
-Pandas proporciona una forma sencilla de interactuar con bases de datos SQLite utilizando la función `read_sql_query()` para leer datos y el método `to_sql()` para escribir datos.
-## Leer datos
-El método `read_sql_query()` permite ejecutar una consulta SQL y cargar los resultados directamente en un DataFrame de pandas.
-
-
-```python
-import pandas as pd
-dfClientes = pd.read_sql_query("SELECT * FROM clientes", conexion)
-print(dfClientes)
-```
-
-        id_cliente  nombre apellidos
-    0            1    Juan     Perez
-    1            2     Ana     Gómez
-    2            3   Laura   Ramírez
-    3            4  Sergio    Torres
-    4            5    Juan     Perez
-    5            6     Ana     Gómez
-    6            7    Luis    Martín
-    7            8    Luis    Martín
-    8            9    Juan     Perez
-    9           10     Ana     Gómez
-    10          11    Luis    Martín
-    11          12   María     López
-    12          13    Luis  Martínez
-    13          14   Marta     López
-    14          16   Sofía   Ramírez
-    15          17   Diego    Torres
-    16          18   Elena      Vega
-    17          19  Andrés      Rojo
-
-
-### Indicar índices al leer datos
-Al utilizar `read_sql_query()`, se puede especificar una columna para que actúe como índice del DataFrame utilizando el parámetro `index_col`.
-
-
-```python
-dfClientes = pd.read_sql_query("SELECT * FROM clientes", conexion, index_col="id_cliente")
-print(dfClientes)
-```
-
-                nombre apellidos
-    id_cliente                  
-    1             Juan     Perez
-    2              Ana     Gómez
-    3            Laura   Ramírez
-    4           Sergio    Torres
-    5             Juan     Perez
-    6              Ana     Gómez
-    7             Luis    Martín
-    8             Luis    Martín
-    9             Juan     Perez
-    10             Ana     Gómez
-    11            Luis    Martín
-    12           María     López
-    13            Luis  Martínez
-    14           Marta     López
-    16           Sofía   Ramírez
-    17           Diego    Torres
-    18           Elena      Vega
-    19          Andrés      Rojo
-    20           Laura   Ramírez
-    21          Sergio    Torres
-
-
-## Escribir datos
-El método `to_sql()` permite escribir un DataFrame de pandas directamente en una tabla de la base de datos SQLite.
-Este método recibe como argumentos:
-- El nombre de la tabla
-- La conexión a la base de datos
-- Parámetros opcionales:
-  - `if_exists` para especificar qué hacer si la tabla ya existe (por ejemplo, 'fail', 'replace', 'append')
-  - `index` para indicar si se debe escribir el índice del DataFrame como una columna separada en la tabla.
-
-
-```python
-df = pd.DataFrame({
-    'nombre': ['Laura', 'Sergio'],
-    'apellidos': ['Ramírez', 'Torres']
-})
-df.to_sql('clientes', conexion, if_exists='append', index=False)
-```
-
-
-
-
-    2
-
-
-
-
-```python
-
-```
+    
