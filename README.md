@@ -14,3 +14,4 @@ Profesor: Jorge Sánchez Asenjo
 - [Introducción a los sistemas de bases de datos](markdown/U02/introduccion_bd.md)
 - [Introducción a SQLite](markdown/U02/sqlite.md)
 - [Introducción a MySQL](markdown/U02/mysql.md)
+- [SQL Alchemy] (markdown/U02/sql_alchemy.md)
