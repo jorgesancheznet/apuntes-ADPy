@@ -52,7 +52,12 @@
   - [Método filter()](#Método-filter())
   - [Filtrado por tipo de datos](#Filtrado-por-tipo-de-datos)
   - [Filtrado con arrays booleanos](#Filtrado-con-arrays-booleanos)
-
+- [Obtener información del DataFrame](#Obtener-información-del-DataFrame)
+  - [Método info()](#Método-info())
+  - [Propiedad columns](#Propiedad-columns)
+  - [Propiedad shape](#Propiedad-shape)
+  - [Propiedad dtypes](#Propiedad-dtypes)
+  - [Propiedad index](#Propiedad-index)
 - [Operar con DataFrames](#Operar-con-DataFrames)
   - [Eliminar columnas](#Eliminar-columnas)
   - [Añadir columnas a DataFrames](#Añadir-columnas-a-DataFrames)
@@ -72,24 +77,31 @@
   - [Método `describe()`](#Método-`describe()`)
   - [Método `astype()`](#Método-`astype()`)
   - [Método `sort_values()`](#Método-`sort_values()`)
-
-- [Obtener información del DataFrame](#Obtener-información-del-DataFrame)
-  - [Método info()](#Método-info())
-  - [Propiedad columns](#Propiedad-columns)
-  - [Propiedad shape](#Propiedad-shape)
-  - [Propiedad dtypes](#Propiedad-dtypes)
-  - [Propiedad index](#Propiedad-index)
 - [Valores NaN](#Valores-NaN)
   - [Modificación de valores NaN](#Modificación-de-valores-NaN)
   - [Eliminación de valores NaN](#Eliminación-de-valores-NaN)
   - [Detección de valores NaN](#Detección-de-valores-NaN)
   - [Método notna()](#Método-notna())
+- [Filtrado avanzado de DataFrames](#Filtrado-avanzado-de-DataFrames)
+  - [Filtrado por pertenencia con isin()](#Filtrado-por-pertenencia-con-isin())
+  - [Filtrado por valores nulos con isnull()` y `notnull()](#Filtrado-por-valores-nulos-con-isnull()-y-notnull())
+  - [Filtrado por rango de valores con between()](#Filtrado-por-rango-de-valores-con-between())
+  - [Filtrado condicional con query()](#Filtrado-condicional-con-query())
+  - [Filtro mediante el método where()](#Filtro-mediante-el-método-where())
+  - [Filtrado con el método mask()](#Filtrado-con-el-método-mask())
+  - [Filtrar por contenido de texto con str.contains()](#Filtrar-por-contenido-de-texto-con-str.contains())
+  - [Filtrado mediante expresiones regulares con str.match()](#Filtrado-mediante-expresiones-regulares-con-str.match())
+  - [Filtrado con los métodos nlargest() y nsmallest()](#Filtrado-con-los-métodos-nlargest()-y-nsmallest())
 - [Valores duplicados](#Valores-duplicados)
   - [Método drop_duplicates()](#Método-drop_duplicates())
   - [Método duplicated()](#Método-duplicated())
 - [Agrupar datos en un DataFrame](#Agrupar-datos-en-un-DataFrame)
   - [Método groupby()](#Método-groupby())
   - [Método pivot_table()](#Método-pivot_table())
+- [Combinación de DataFrames](#Combinación-de-DataFrames)
+  - [Método merge()](#Método-merge())
+  - [Método join()](#Método-join())
+  - [Método concat()](#Método-concat())
 
 ## Introducción a la librería pandas
 La librería pandas es una de las herramientas más poderosas y populares en Python para el análisis y manipulación de datos. La palabra "pandas" procede del término *"panel data"*, que se refiere a conjuntos de datos multidimensionales. 
@@ -1479,6 +1491,80 @@ print("\nValores filtrados:\n",df[filtro])
     2  Carlos    29  Valencia
 
 
+## Obtener información del DataFrame
+### Método info()
+El método `info()` proporciona un resumen conciso del DataFrame, incluyendo el número de filas.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+})
+print(df.info())
+```
+
+    <class 'pandas.core.frame.DataFrame'>
+    RangeIndex: 4 entries, 0 to 3
+    Data columns (total 3 columns):
+     #   Column  Non-Null Count  Dtype 
+    ---  ------  --------------  ----- 
+     0   Nombre  4 non-null      object
+     1   Edad    4 non-null      int64 
+     2   Ciudad  4 non-null      object
+    dtypes: int64(1), object(2)
+    memory usage: 228.0+ bytes
+    None
+
+
+### Propiedad columns
+La propiedad `columns` devuelve un objeto de tipo `Index` que contiene los nombres de las columnas del DataFrame.
+
+
+```python
+print(df.columns)
+```
+
+    Index(['Nombre', 'Edad', 'Ciudad'], dtype='object')
+
+
+### Propiedad shape
+La propiedad `shape` devuelve una tupla que indica el número de filas y columnas del DataFrame.
+
+
+```python
+print(df.shape)
+```
+
+    (4, 3)
+
+
+### Propiedad dtypes
+La propiedad `dtypes` devuelve una **Serie** que contiene los tipos de datos de cada columna del DataFrame.
+
+
+```python
+print(df.dtypes)
+```
+
+    Nombre    object
+    Edad       int64
+    Ciudad    object
+    dtype: object
+
+
+### Propiedad index
+La propiedad `index` devuelve el índice (etiquetas de las filas) del DataFrame
+
+
+```python
+print(df.index);
+```
+
+    RangeIndex(start=0, stop=4, step=1)
+
+
 ## Operar con DataFrames
 ### Eliminar columnas
 Podemos eliminar columnas utilizando el operador `del`.
@@ -2161,86 +2247,22 @@ print("\nDataFrame ordenado por edad (descendente):\n",df_ordenado_desc)
     0     Ana    28     Madrid
 
 
-## Obtener información del DataFrame
-### Método info()
-El método `info()` proporciona un resumen conciso del DataFrame, incluyendo el número de filas.
+Si queremos que la ordenación afecte al DataFrame original, debemos usar el parámetro `inplace=True`.
 
 
 ```python
-df = pd.DataFrame({
-    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
-    'Edad': [28, 34, 29, 42],
-    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
-})
-print(df.info())
+df.sort_values(by='Edad',inplace=True)
+print(df)
 ```
 
-    <class 'pandas.core.frame.DataFrame'>
-    RangeIndex: 4 entries, 0 to 3
-    Data columns (total 3 columns):
-     #   Column  Non-Null Count  Dtype 
-    ---  ------  --------------  ----- 
-     0   Nombre  4 non-null      object
-     1   Edad    4 non-null      int64 
-     2   Ciudad  4 non-null      object
-    dtypes: int64(1), object(2)
-    memory usage: 228.0+ bytes
-    None
+       Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    2  Carlos    29   Valencia
+    1    Luis    34  Barcelona
+    3   Marta    42    Sevilla
 
 
-### Propiedad columns
-La propiedad `columns` devuelve un objeto de tipo `Index` que contiene los nombres de las columnas del DataFrame.
-
-
-```python
-print(df.columns)
-```
-
-    Index(['Nombre', 'Edad', 'Ciudad'], dtype='object')
-
-
-### Propiedad shape
-La propiedad `shape` devuelve una tupla que indica el número de filas y columnas del DataFrame.
-
-
-```python
-print(df.shape)
-```
-
-    (4, 3)
-
-
-### Propiedad dtypes
-La propiedad `dtypes` devuelve una **Serie** que contiene los tipos de datos de cada columna del DataFrame.
-
-
-```python
-print(df.dtypes)
-```
-
-    Nombre    object
-    Edad       int64
-    Ciudad    object
-    dtype: object
-
-
-### Propiedad index
-La propiedad `index` devuelve el índice (etiquetas de las filas) del DataFrame
-
-
-```python
-print(df.index);
-```
-
-    RangeIndex(start=0, stop=4, step=1)
-
-
-
-```python
-print
-```
-
-## Valores NaN y valores duplicados
+## Valores NaN
 Los valores NaN (Not a Number) representan datos faltantes o no disponibles en un DataFrame o Serie de pandas. Estos valores pueden surgir por diversas razones, como datos incompletos, errores en la recopilación de datos o durante el procesamiento de datos.
 Pandas proporciona varias funciones y métodos para manejar los valores NaN, como `isna()`, `fillna()`, `dropna()`, entre otros. Estos métodos permiten identificar, reemplazar o eliminar los valores NaN según las necesidades del análisis de datos
 ### Modificación de valores NaN
@@ -2358,6 +2380,295 @@ print("DataFrame booleano indicando la ausencia de NaN:\n",df_notna)
     3   True   True   True
 
 
+## Filtrado avanzado de DataFrames
+Además del filtrado lógico básico, pandas ofrece varios métodos avanzados para filtrar DataFrames de diferentes maneras.
+
+### Filtrado por pertenencia con `isin()`
+El método `isin()` permite filtrar filas basándose en si los valores de una columna pertenecen a una lista específica de valores.
+
+
+
+```python
+# Ejemplo de uso de isin()
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+})
+filtro = df['Nombre'].isin(['Ana', 'Carlos'])
+print("DataFrame filtrado (nombre en ['Ana', 'Carlos']):\n",df[filtro])
+```
+
+    DataFrame filtrado (nombre en ['Ana', 'Carlos']):
+        Nombre  Edad    Ciudad
+    0     Ana    28    Madrid
+    2  Carlos    29  Valencia
+
+
+Es fácil seleccionar los valores que no pertenecen a la lista utilizando el operador `~` (negación).
+
+
+```python
+filtro = ~df['Nombre'].isin(['Ana', 'Carlos'])
+print("DataFrame filtrado (nombre no en ['Ana', 'Carlos']):\n",df[filtro])
+```
+
+    DataFrame filtrado (nombre no en ['Ana', 'Carlos']):
+       Nombre  Edad     Ciudad
+    1   Luis    34  Barcelona
+    3  Marta    42    Sevilla
+
+
+### Filtrado por valores nulos con `isnull()` y `notnull()`
+Los métodos `isnull()` y `notnull()` permiten filtrar filas basándose en si los valores de una columna son nulos o no nulos, respectivamente.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', np.nan, 'Valencia', np.nan]
+})
+print("DataFrame original:\n",df)
+filtro_nulos = df['Ciudad'].isnull()
+print("\nDataFrame filtrado (ciudad es nulo):\n",df[filtro_nulos])
+filtro_no_nulos = df['Ciudad'].notnull()
+print("\nDataFrame filtrado (ciudad no es nulo):\n",df[filtro_no_nulos])
+```
+
+    DataFrame original:
+        Nombre  Edad    Ciudad
+    0     Ana    28    Madrid
+    1    Luis    34       NaN
+    2  Carlos    29  Valencia
+    3   Marta    42       NaN
+    
+    DataFrame filtrado (ciudad es nulo):
+       Nombre  Edad Ciudad
+    1   Luis    34    NaN
+    3  Marta    42    NaN
+    
+    DataFrame filtrado (ciudad no es nulo):
+        Nombre  Edad    Ciudad
+    0     Ana    28    Madrid
+    2  Carlos    29  Valencia
+
+
+### Filtrado por rango de valores con `between()`
+El método `between()` permite filtrar filas basándose en si los valores de una columna numérica se encuentran dentro de un rango específico.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta', 'Goyo'],
+    'Edad': [28, 34, 29, 42, 30],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla','Bilbao']
+})
+filtro = df['Edad'].between(30, 40)
+print("DataFrame filtrado (edad entre 30 y 40):\n",df[filtro])
+```
+
+    DataFrame filtrado (edad entre 30 y 40):
+       Nombre  Edad     Ciudad
+    1   Luis    34  Barcelona
+    4   Goyo    30     Bilbao
+
+
+### Filtrado condicional con `query()`
+El método `query()` permite filtrar filas utilizando una expresión de consulta en forma de cadena.
+Esa expresión puede incluir condiciones lógicas y referencias a las columnas del DataFrame.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta', 'Goyo'],
+    'Edad': [28, 34, 29, 42, 30],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla','Bilbao']
+})
+print("DataFrame original:\n",df)
+print("\nDataFrame filtrado (edad > 30):\n",df.query("Edad > 30"))
+print("\nDataFrame filtrado (Ciudad == 'Madrid' or Ciudad == 'Sevilla'):\n",df.query("Ciudad == 'Madrid' or Ciudad == 'Sevilla'"))
+```
+
+    DataFrame original:
+        Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    1    Luis    34  Barcelona
+    2  Carlos    29   Valencia
+    3   Marta    42    Sevilla
+    4    Goyo    30     Bilbao
+    
+    DataFrame filtrado (edad > 30):
+       Nombre  Edad     Ciudad
+    1   Luis    34  Barcelona
+    3  Marta    42    Sevilla
+    
+    DataFrame filtrado (Ciudad == 'Madrid' or Ciudad == 'Sevilla'):
+       Nombre  Edad   Ciudad
+    0    Ana    28   Madrid
+    3  Marta    42  Sevilla
+
+
+### Filtro mediante el método `where()`
+El método `where()` permite filtrar filas basándose en una condición booleana. Este método devuelve un DataFrame donde los valores que cumplen la condición se mantienen, mientras que los que no la cumplen se reemplazan por el valor NaN.
+Por lo que en realidad no es un filtro de verdad sino un cambio de valores en base a una condición.
+El método `where` posee un parámetro adicional llamado `other`, que permite especificar un valor alternativo para reemplazar los valores que no cumplen la condición y que en lugar de convertirse en NaN, se convierten en el valor indicado.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+})
+print("DataFrame original:\n",df)
+print("\nDataFrame filtrado (edad > 30):\n",df.where(df['Edad'] > 30))
+print("\nDataframe filtrado modificando los valores NaN por 0\n", df.where(df['Edad'] > 30, other=0))
+```
+
+    DataFrame original:
+        Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    1    Luis    34  Barcelona
+    2  Carlos    29   Valencia
+    3   Marta    42    Sevilla
+    
+    DataFrame filtrado (edad > 30):
+       Nombre  Edad     Ciudad
+    0    NaN   NaN        NaN
+    1   Luis  34.0  Barcelona
+    2    NaN   NaN        NaN
+    3  Marta  42.0    Sevilla
+    
+    Dataframe filtrado modificando los valores NaN por 0
+       Nombre  Edad     Ciudad
+    0      0     0          0
+    1   Luis    34  Barcelona
+    2      0     0          0
+    3  Marta    42    Sevilla
+
+
+### Filtrado con el método `mask()`
+El método `mask()` es similar a `where()`, pero invierte la lógica de la condición. En este caso, los valores que cumplen la condición se reemplazan por NaN, mientras que los que no la cumplen se mantienen.
+Al igual que `where()`, el método `mask()` también posee el parámetro `other` para especificar un valor alternativo en lugar de NaN.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+})
+print("DataFrame original:\n",df)
+print("\nDataFrame filtrado mask (edad > 30):\n",df.mask(df['Edad'] > 30))
+print("\nDataframe filtrado modificando los valores NaN por 0\n", df.mask(df['Edad'] > 30, other=0))
+```
+
+    DataFrame original:
+        Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    1    Luis    34  Barcelona
+    2  Carlos    29   Valencia
+    3   Marta    42    Sevilla
+    
+    DataFrame filtrado mask (edad > 30):
+        Nombre  Edad    Ciudad
+    0     Ana  28.0    Madrid
+    1     NaN   NaN       NaN
+    2  Carlos  29.0  Valencia
+    3     NaN   NaN       NaN
+    
+    Dataframe filtrado modificando los valores NaN por 0
+        Nombre  Edad    Ciudad
+    0     Ana    28    Madrid
+    1       0     0         0
+    2  Carlos    29  Valencia
+    3       0     0         0
+
+
+### Filtrar por contenido de texto con `str.contains()`
+El método `str.contains()` permite filtrar filas basándose en si los valores de una columna de tipo cadena contienen una subcadena específica.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+})
+filtro = df['Ciudad'].str.contains('a')
+print("DataFrame filtrado (ciudad contiene 'a'):\n",df[filtro])
+```
+
+    DataFrame filtrado (ciudad contiene 'a'):
+        Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    1    Luis    34  Barcelona
+    2  Carlos    29   Valencia
+    3   Marta    42    Sevilla
+
+
+### Filtrado mediante expresiones regulares con str.match()
+El método `str.match()` permite filtrar filas basándose en si los valores de una columna de tipo cadena coinciden con una expresión regular específica.
+Hay que recordar que las expresiones regulares en Python utilizan el módulo `re`, por lo que se deben seguir las mismas reglas y sintaxis.
+Una expresión regular en Python se puede especificar como una cadena normal o, mucho mejor, como una cadena llamada de tipo *raw* que usa el prefijo `r` antes de las comillas. Esto evita que los caracteres de escape (como `\n`, `\t`, etc.) sean interpretados por Python y permite que se utilicen directamente en la expresión regular.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta'],
+    'Edad': [28, 34, 29, 42],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla']
+})
+filtro = df['Ciudad'].str.match(r'^[A-Ma-m].*')
+print("DataFrame filtrado (ciudad comienza con letra A-M):\n",df[filtro])
+```
+
+    DataFrame filtrado (ciudad comienza con letra A-M):
+       Nombre  Edad     Ciudad
+    0    Ana    28     Madrid
+    1   Luis    34  Barcelona
+
+
+### Filtrado con los métodos `nlargest()` y `nsmallest()`
+Los métodos `nlargest()` y `nsmallest()` permiten filtrar las filas que contienen los n valores más grandes o más pequeños en una columna específica de un DataFrame.
+
+
+```python
+df = pd.DataFrame({
+    'Nombre': ['Ana', 'Luis', 'Carlos', 'Marta', 'Goyo'],
+    'Edad': [28, 34, 29, 42, 30],
+    'Ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla','Bilbao']
+})
+print("DataFrame original:\n",df)
+print("\nDataFrame con las 2 edades más grandes:\n",df.nlargest(2, 'Edad'))
+print("\nDataFrame con las 2 edades más pequeñas:\n",df.nsmallest(2, 'Edad'))
+```
+
+    DataFrame original:
+        Nombre  Edad     Ciudad
+    0     Ana    28     Madrid
+    1    Luis    34  Barcelona
+    2  Carlos    29   Valencia
+    3   Marta    42    Sevilla
+    4    Goyo    30     Bilbao
+    
+    DataFrame con las 2 edades más grandes:
+       Nombre  Edad     Ciudad
+    3  Marta    42    Sevilla
+    1   Luis    34  Barcelona
+    
+    DataFrame con las 2 edades más pequeñas:
+        Nombre  Edad    Ciudad
+    0     Ana    28    Madrid
+    2  Carlos    29  Valencia
+
+
+Ambos métodos poseen un parámetro llamado `keep`, que permite especificar cómo manejar los valores empatados. Los valores posibles son:
+- `'first'`: Mantiene la primera aparición de los valores empatados (si hay varios solo tiene en cuenta el primero)
+- `'last'`: Mantiene la última aparición de los valores empatados (si hay varios solo tiene en cuenta el último).
+- `'all'`: Mantiene todos los valores empatados.
+
 ## Valores duplicados
 ### Método drop_duplicates()
 El método `drop_duplicates()` permite eliminar filas duplicadas en un DataFrame, manteniendo solo la primera aparición de cada fila duplicada.
@@ -2420,7 +2731,7 @@ print("Serie booleana indicando filas duplicadas:\n",filas_duplicadas)
 ## Agrupar datos en un DataFrame
 ### Método groupby()
 El método `groupby()` permite agrupar los datos de un DataFrame según una o más columnas y aplicar funciones de agregación a cada grupo.
-La forma de hacerlo es indicar la columna o columnas por las que se quiere agrupar y luego aplicar una función de agregación como `sum()`, `mean()`, `count()`, etc.
+`groupby()` devuelve un objeto especial de tipo `DataFrameGroupBy`, que representa los grupos formados. A este objeto se le pueden aplicar funciones de agregación tales como: `sum()`, `mean()`, `count()`, etc. para obtener resultados resumidos.
 
 
 
@@ -2550,4 +2861,126 @@ print("Tabla dinámica de ventas por departamento y mes:\n",tabla_dinamica)
     Ventas        2650.8    650.0
 
 
+## Combinación de DataFrames
+Pandas proporciona varias funciones para combinar DataFrames de diferentes maneras, como `merge()`, `join()` y `concat()`.
+### Método merge()
+El método `merge()` permite combinar dos DataFrames basándose en una o más columnas comunes, similar a las operaciones de unión e intersección de las bases de datos relacionales.
+Los parámetros principales de `merge()`
+* `how`: Especifica el tipo de unión que se realizará. Los valores posibles son:
+  - `'inner'`: Devuelve solo las filas que tienen coincidencias en ambos DataFrames (intersección).
+  - `'outer'`: Devuelve todas las filas de ambos DataFrames, rellenando con NaN donde no haya coincidencias (unión completa).
+  - `'left'`: Devuelve todas las filas del DataFrame izquierdo y las filas coincidentes del DataFrame derecho (unión izquierda).
+  - `'right'`: Devuelve todas las filas del DataFrame derecho y las filas coincidentes del DataFrame izquierdo (unión derecha).
+* `on`: Especifica la columna o columnas comunes en las que se basará la combinación. Si no se especifica, pandas intentará encontrar columnas comunes automáticamente.
+* `left_on` y `right_on`: Permiten especificar columnas diferentes en cada DataFrame para la combinación.
+* `suffixes`: Permite especificar sufijos para las columnas que tienen el mismo nombre en ambos DataFrames, evitando conflictos de nombres.
+* `indicator`: Si se establece en `True`, agrega una columna adicional al DataFrame resultante que indica el origen de cada fila (si proviene del DataFrame izquierdo, derecho o ambos).
+* `left_index` y `right_index`: Si se establecen en `True`, utilizan los índices de los DataFrames izquierdo y derecho para la combinación en lugar de columnas específicas.
+
+
+```python
+df1 = pd.DataFrame({
+    'Empleado': ['Ana', 'Luis', 'Eva', 'Carlos', 'Guillermo'],
+    'Edad': [28, 34, 29, 40, 36]
+})
+df2 = pd.DataFrame({
+    'Empleado': ['Sonia', 'Ana', 'Jaime', 'Luis', 'Carlos', 'Manuel'],
+    'Salario': [2500, 2800, 2200, 3000, 2700, 2400]
+})
+# Realizar una unión interna (inner join) basada en la columna 'Empleado'
+df_inner = pd.merge(df1, df2, on='Empleado', how='inner')
+print("Unión interna (inner join):\n",df_inner) # Salen solo los datos comunes
+```
+
+    Unión interna (inner join):
+       Empleado  Edad  Salario
+    0      Ana    28     2800
+    1     Luis    34     3000
+    2   Carlos    40     2700
+
+
+### Método `join()`
+El método `join()` permite combinar dos DataFrames basándose en sus índices, similar a las operaciones de unión en bases de datos relacionales.
+Los parámetros principales de `join()` son (además del DataFrame a unir):
+* `how`: Especifica el tipo de unión que se realizará. Los valores posibles son:
+  - `'left'`: Devuelve todas las filas del DataFrame izquierdo y las filas coincidentes del DataFrame derecho (unión izquierda).
+  - `'right'`: Devuelve todas las filas del DataFrame derecho y las filas coincidentes del DataFrame izquierdo (unión derecha).
+  - `'outer'`: Devuelve todas las filas de ambos DataFrames, rellenando con NaN donde no haya coincidencias (unión completa).
+  - `'inner'`: Devuelve solo las filas que tienen coincidencias en ambos DataFrames (intersección).
+* `lsuffix` y `rsuffix`: Permiten especificar sufijos para las columnas que tienen el mismo nombre en ambos DataFrames, evitando conflictos de nombres.
+* `sort`: Si es `True`, ordena las filas del DataFrame resultante por el índice.
+* `on`: Permite especificar una columna común en la que se basará la combinación, en lugar de utilizar los índices. Si la columna tiene distinto nombre en cada DataFrame, se pueden usar los parámetros `left_on` y `right_on` para especificarlo.
+
+
+```python
+dfEmpleados = pd.DataFrame({
+    'Empleado': ['Ana', 'Luis', 'Eva', 'Carlos'],
+    'Edad': [28, 34, 29, 40]
+}, index = ['e1','e2','e3','e4'])
+dfVentas = pd.DataFrame({
+    'Region': ['Norte', 'Sur', 'Sur', 'Oeste', 'Este', 'Norte','Sur','Este'],
+    'Valor': [1200, 1500, 800, 950, 1100, 1300, 700, 1150]
+}, index = ['e1','e2','e2','e1','e3','e3','e3','e4'])
+# Realizar una unión interior (inner join) basada en los índices de ambos DataFrames
+df_inner_index = dfEmpleados.join(dfVentas, how='inner')
+print("Unión interna (inner join) por índices:\n",df_inner_index)
+```
+
+    Unión interna (inner join) por índices:
+        Empleado  Edad Region  Valor
+    e1      Ana    28  Norte   1200
+    e1      Ana    28  Oeste    950
+    e2     Luis    34    Sur   1500
+    e2     Luis    34    Sur    800
+    e3      Eva    29   Este   1100
+    e3      Eva    29  Norte   1300
+    e3      Eva    29    Sur    700
+    e4   Carlos    40   Este   1150
+
+
+### Método `concat()`
+El método `concat()` permite concatenar varios DataFrames a lo largo de un eje especificado (filas o columnas).
+Los parámetros principales de `concat()` son:
+* `objs`: Una lista o un diccionario de DataFrames que se van a concatenar.
+* `axis`: Especifica el eje a lo largo del cual se realizará la concatenación. Los valores posibles son:
+  - `0`: Concatenar por filas (verticalmente).
+  - `1`: Concatenar por columnas (horizontalmente).
+* `ignore_index`: Si es `True`, se ignoran los índices originales y se crea un nuevo índice secuencial en el DataFrame resultante.
+* `join`: Especifica cómo manejar las columnas que no coinciden entre los DataFrames. Los valores posibles son:
+  - `'inner'`: Solo se incluyen las columnas que están presentes en todos los DataFrames.
+  - `'outer'`: Se incluyen todas las columnas de todos los DataFrames, rellenando con NaN donde no haya coincidencias.
+* `keys`: Permite agregar un nivel adicional de índice al DataFrame resultante, utilizando las claves proporcionadas para identificar cada DataFrame original.
+
+
+```python
+df1 = pd.DataFrame({
+    'Empleado': ['Ana', 'Luis', 'Carlos'],
+    'Edad': [28, 34, 29]
+})
+df2 = pd.DataFrame({
+    'Empleado': ['Sonia', 'Jaime', 'Eva'],
+    'Salario': [40, 32, 28]
+})
+df = pd.concat([df1, df2], ignore_index=True, axis=0)
+print("Concatenación en vertical\n",df)
+#en horizontal
+df = pd.concat([df1, df2], ignore_index=True, axis=1)
+print("\nConcatenación en horizontal\n",df)
+
+```
+
+    Concatenación en vertical
+       Empleado  Edad  Salario
+    0      Ana  28.0      NaN
+    1     Luis  34.0      NaN
+    2   Carlos  29.0      NaN
+    3    Sonia   NaN     40.0
+    4    Jaime   NaN     32.0
+    5      Eva   NaN     28.0
+    
+    Concatenación en horizontal
+             0   1      2   3
+    0     Ana  28  Sonia  40
+    1    Luis  34  Jaime  32
+    2  Carlos  29    Eva  28
 
