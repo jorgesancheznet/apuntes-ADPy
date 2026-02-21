@@ -17,4 +17,4 @@ Profesor: Jorge Sánchez Asenjo
 - [SQL Alchemy](markdown/U02/sqlalchemy.md)
 
 ## [Unidad 03 - Limpieza y estandarización de datos](markdown/U03/README.md)
-- [Limpieza y estandarización de datos](/Limpieza-estandarizacion.md)
+- [Limpieza y estandarización de datos](Limpieza-estandarizacion.md)
