@@ -15,3 +15,6 @@ Profesor: Jorge Sánchez Asenjo
 - [Introducción a SQLite](markdown/U02/sqlite.md)
 - [Introducción a MySQL](markdown/U02/mysql.md)
 - [SQL Alchemy](markdown/U02/sqlalchemy.md)
+
+## [Unidad 03 - Limpieza y estandarización de datos](markdown/U03/README.md)
+- [Limpieza y estandarización de datos](/Limpieza-estandarizacion.md)
