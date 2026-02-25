@@ -640,160 +640,25 @@ print(secuencia)
                   dtype='datetime64[ns]', freq='ME')
     
 
-El objeto que crea este método es de tipo `DatetimeIndex`, que es un tipo de índice especializado para manejar fechas y horas en Pandas. Este índice nos permite realizar operaciones de filtrado, selección y manipulación de datos basados en fechas de manera eficiente.
-
-Para relacionar un DataFrame ya existente a una secuencia de fechas creada con `date_range()`, podemos establecer la secuencia de fechas como el índice del DataFrame usando el método `set_index()`. Esto nos permitirá trabajar con el DataFrame utilizando las fechas como índice, lo que facilita el análisis de series temporales y la realización de operaciones basadas en fechas.
-
-Ejemplo:
-
 
 ```python
-# Dataframe de ejemplo con fechas y valores de ventas, con 20 filas para que se vea mejor el resultado del remuestreo
-datos = pd.DataFrame({
-    "fecha": ["2025-06-15", "2025-07-01", "2025-08-20", "2025-09-10", "2025-07-12",
-              "2025-10-05", "2025-11-20", "2025-12-15", "2026-01-10", "2026-02-25",
-              "2026-03-15", "2026-04-10", "2026-05-20", "2026-06-15", "2026-07-01",
-              "2026-08-20", "2026-09-10", "2026-10-05", "2026-11-20", "2026-12-15"],
-    "ventas": [9800, 7820, 8930, 6740, 8700, 9230, 7600, 6890, 7200, 8100,
-               7210, 6820, 9230, 4900, 5800, 8230, 7200, 9600, 8240, 9050]
-})
-datos["fecha"] = pd.to_datetime(datos["fecha"])  # Convertimos la columna "fecha" a tipo datetime
-secuencia
+d = pd.date_range(start="2025-01-01", end="2025-12-31", freq="ME")  #
+# Crea un dataframe con esa secuencia y una columna, llamada ventas con los datos vacíos
+df = pd.DataFrame(index=d, columns=["ventas"])
+print(df)
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>fecha</th>
-      <th>ventas</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2025-06-15</td>
-      <td>9800</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2025-07-01</td>
-      <td>7820</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2025-08-20</td>
-      <td>8930</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2025-09-10</td>
-      <td>6740</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2025-07-12</td>
-      <td>8700</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>2025-10-05</td>
-      <td>9230</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>2025-11-20</td>
-      <td>7600</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>2025-12-15</td>
-      <td>6890</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>2026-01-10</td>
-      <td>7200</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>2026-02-25</td>
-      <td>8100</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>2026-03-15</td>
-      <td>7210</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>2026-04-10</td>
-      <td>6820</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>2026-05-20</td>
-      <td>9230</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>2026-06-15</td>
-      <td>4900</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>2026-07-01</td>
-      <td>5800</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>2026-08-20</td>
-      <td>8230</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>2026-09-10</td>
-      <td>7200</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>2026-10-05</td>
-      <td>9600</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>2026-11-20</td>
-      <td>8240</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>2026-12-15</td>
-      <td>9050</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```python
-
-```
+               ventas
+    2025-01-31    NaN
+    2025-02-28    NaN
+    2025-03-31    NaN
+    2025-04-30    NaN
+    2025-05-31    NaN
+    2025-06-30    NaN
+    2025-07-31    NaN
+    2025-08-31    NaN
+    2025-09-30    NaN
+    2025-10-31    NaN
+    2025-11-30    NaN
+    2025-12-31    NaN
+    
