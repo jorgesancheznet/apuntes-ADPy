@@ -32,6 +32,7 @@ Normalmente al importar el módulo `datetime`, se suelen importar solo la clases
 
 ```python
 from datetime import date, datetime, timedelta
+import pandas as pd
 ```
 
 
@@ -183,7 +184,7 @@ Los objetos de tipo `timedelta` tienen varias propiedades que nos permiten acced
 - `microseconds`: número total de microsegundos en el intervalo (excluyendo los días y segundos)
 - `total_seconds()`: Convierte el intervalo a segundos y devuelve el resultado como un número de punto flotante.
 
-Podemos observar que no aparecen propiedades para obte
+Podemos observar que no aparecen propiedades para obtener años o meses.
 
 
 ```python
@@ -369,6 +370,29 @@ print(datos["fecha"].dtype)  # Comprobamos que el tipo ha cambiado
     datetime64[ns]
     
 
+En el caso de que las fechas contengan diferentes usos horarios, se puede utilizar el parámetro utc para indicar que las fechas están en formato UTC (Tiempo Universal Coordinado) y Pandas las convertirá automáticamente a la zona horaria local de nuestro sistema.
+
+Eso se realiza de la siguiente manera:
+
+
+```python
+dfZonas = pd.DataFrame({
+    "fecha": ["2025-06-15 14:30:00+02:00", "2025-07-01 09:45:00+01:00", "2025-08-20 18:15:00+00:00"],
+    "valor": [9800, 7820, 8930]
+})
+# Convertimos la columna "fecha" a tipo datetime indicando que las fechas están en formato UTC
+dfZonas["fecha"] = pd.to_datetime(dfZonas["fecha"], utc=True)
+print(dfZonas["fecha"].dtype)  # Comprobamos que el tipo ha cambiado
+print(dfZonas["fecha"])  # Muestra las fechas convertidas a la zona hor
+```
+
+    datetime64[ns, UTC]
+    0   2025-06-15 12:30:00+00:00
+    1   2025-07-01 08:45:00+00:00
+    2   2025-08-20 18:15:00+00:00
+    Name: fecha, dtype: datetime64[ns, UTC]
+    
+
 ### Extraer información de fechas
 Una vez que tenemos una columna de fechas convertida a objetos `Timestamp`, podemos extraer fácilmente información específica de esas fechas usando los atributos de los objetos `Timestamp`. Por ejemplo, podemos extraer el año, el mes, el día, la hora, el minuto, el segundo, etc.
 
@@ -389,27 +413,8 @@ print("Horas:\n",datos["fecha"].dt.hour)  # Extrae la hora de cada fecha (en est
 
 ```
 
-    Años:
-     0    2025
-    1    2025
-    2    2025
-    Name: fecha, dtype: int32
-    Meses:
-     0    6
-    1    7
-    2    8
-    Name: fecha, dtype: int32
-    Días:
-     0    12
-    1     1
-    2    20
-    Name: fecha, dtype: int32
-    Horas:
-     0    0
-    1    0
-    2    0
-    Name: fecha, dtype: int32
-    
+### Dar formato a la fecha
+También podemos usar el método `dt.strftime()` para formatear las fechas de una columna de fechas a un formato específico. Este método funciona de manera similar al método `strftime()` que vimos anteriormente, pero se aplica a cada elemento de la columna de fechas. Recibe como argumento una cadena de formato con los mismos códigos que el método `strftime()`.
 
 ### Filtrar datos por fechas
 Pandas también nos permite filtrar datos en un DataFrame basándonos en condiciones relacionadas con las fechas. Podemos usar operadores de comparación para filtrar filas que cumplan ciertas condiciones en una columna de fechas. Por ejemplo, podemos filtrar filas que correspondan a un año específico, a un rango de fechas, o a un mes determinado.
@@ -448,7 +453,7 @@ print(datos_julio)
     4 2025-07-12   11000
     
 
-### Cálculos estadísticons con fechas
+### Cálculos estadísticos con fechas
 Pandas también nos permite realizar cálculos estadísticos basados en fechas. Por ejemplo, podemos calcular la media, la mediana, el máximo, el mínimo, etc., de una columna de fechas o de una columna numérica agrupada por fechas. Para ello podemos usar las funciones de agregación de Pandas, como `groupby()`, `mean()`, `median()`, `max()`, `min()`, etc., junto con la propiedad `dt` para agrupar por diferentes componentes de las fechas (por ejemplo, por año, por mes, por día de la semana, etc.).
 Ejemplo:
 
