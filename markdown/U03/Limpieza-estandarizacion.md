@@ -42,6 +42,7 @@
       * [Función `str.get_dummies()`](#Función-`str.get_dummies()`)
       * [Método `explode()`](#Método-`explode()
 * [Correlación entre variables](#Correlación-entre-variables)
+* [Tablas de contingencia](#Tablas-de-contingencia)
 
 
  ## Librerías necesarias
@@ -1752,3 +1753,76 @@ En resumen los resultados, cercanos a 1 indican una fuerte correlación positiva
 Una correlación positiva indica que a medida que una variable aumenta, la otra variable también tiende a aumentar. Por ejemplo, si el salario y las ventas tienen una correlación positiva, significa que a medida que el salario de los empleados aumenta, las ventas también tienden a aumentar. Esto podría sugerir que un salario más alto puede motivar a los empleados a trabajar más duro y generar más ventas.
 
 Una correlación negativa indica que a medida que una variable aumenta, la otra variable tiende a disminuir. Por ejemplo, si el salario y la edad tienen una correlación negativa, significa que a medida que la edad de los empleados aumenta, el salario tiende a disminuir. Esto podría sugerir que los empleados más jóvenes tienden a tener salarios más altos, mientras que los empleados más mayores tienden a tener salarios más bajos.
+
+## Tablas de contingencia
+Las tablas de contingencia son una herramienta estadística que se utiliza para analizar la relación entre dos o más variables categóricas. Estas tablas muestran la frecuencia o el conteo de casos para cada combinación de categorías de las variables. Las tablas de contingencia son útiles para identificar patrones, asociaciones o dependencias entre las variables categóricas, y pueden ser utilizadas para realizar pruebas estadísticas como la prueba de chi-cuadrado para evaluar la significancia de la asociación entre las variables.
+
+Pandas posee el método `crosstab()` que permite crear tablas de contingencia de manera sencilla. Este método toma como argumentos las variables categóricas que se desean analizar y devuelve una tabla de contingencia con las frecuencias o conteos de casos para cada combinación de categorías.
+
+Este método tiene varios parámetros que permiten personalizar la tabla de contingencia, como `normalize` para normalizar los valores, `margins` para agregar totales marginales, entre otros.
+
+
+```python
+dfVentas = pd.DataFrame({
+    "vendedor": ['Juan', 'María', 'Pedro', 'Ana', 'Lucio', 'Sara', 'Antonio', 'Laura', 'Carlos', 'Marta', 'Jorge', 'Sofía', 'Diego', 'Elena', 'Alberto', 'Isabel', 'Fernando', 'Carmen', 'Ricardo', 'Patricia'],
+    "genero":['H', 'M', 'H', 'M', 'H', 'M', 'H', 'M', 'H', 'M', 'H', 'M', 'H', 'M', 'H', 'M', 'H', 'M', 'H', 'M'],
+    "region": ['Sur','Oeste', 'Norte', 'Sur', 'Este', 'Oeste', 'Norte', 'Sur', 'Este', 'Oeste', 'Norte', 'Sur', 'Este', 'Oeste', 'Oeste', 'Sur', 'Norte', 'Oeste', 'Sur', 'Sur']
+})
+tabla_contingencia = pd.crosstab(dfVentas['genero'], dfVentas['region']) # Crear una tabla de contingencia utilizando crosstab() para analizar la relación entre las variables genero y region
+tabla_contingencia
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>region</th>
+      <th>Este</th>
+      <th>Norte</th>
+      <th>Oeste</th>
+      <th>Sur</th>
+    </tr>
+    <tr>
+      <th>genero</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>H</th>
+      <td>3</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>M</th>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
