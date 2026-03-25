@@ -1307,21 +1307,21 @@ df_one_hot = pd.get_dummies(df, columns=['departamento', 'género'], dummy_na=Tr
 print(df_one_hot)
 ```
 
-      nombre  salario  departamento_Producción  departamento_Ventas  \
-    0   Juan     1200                    False                 True   
-    1  María     1900                    False                False   
-    2  Pedro     2500                     True                False   
-    3    Ana     1300                    False                 True   
-    4  Lucio     1600                    False                False   
-    5   Sara     1500                    False                 True   
+      nombre  salario  departamento_Dirección  departamento_Producción  \
+    0   Juan     1200                   False                    False   
+    1  María     1900                    True                    False   
+    2  Pedro     2500                   False                     True   
+    3    Ana     1300                   False                    False   
+    4  Lucio     1600                    True                    False   
+    5   Sara     1500                   False                    False   
     
-       departamento_nan  género_M  género_nan  
-    0             False      True       False  
-    1             False     False       False  
-    2             False      True       False  
-    3             False     False        True  
-    4             False      True       False  
-    5             False     False       False  
+       departamento_Ventas  departamento_nan  género_F  género_M  género_nan  
+    0                 True             False     False      True       False  
+    1                False             False      True     False       False  
+    2                False             False     False      True       False  
+    3                 True             False     False     False        True  
+    4                False             False     False      True       False  
+    5                 True             False      True     False       False  
     
 
 La librería `sklearn.preprocessing` también ofrece una función llamada `OneHotEncoder` que implementa esta técnica de codificación de manera eficiente y con menos código. Al igual que ocurría con `MinMaxScaler` y `RobustScaler`, el resultado de `OneHotEncoder` es un array de NumPy, por lo que si queremos mantener el formato de DataFrame, debemos convertir ese array de nuevo a un DataFrame y asignar los nombres de las columnas correspondientes.
@@ -1425,12 +1425,14 @@ print(df)
 
 ```
 
-
-
-
-    array([2, 0, 1, 2, 0, 2])
-
-
+      nombre  salario departamento género  departamento_encoded  género_encoded
+    0   Juan     1200       Ventas      M                     2               1
+    1  María     1900    Dirección      F                     0               0
+    2  Pedro     2500   Producción      M                     1               1
+    3    Ana     1300       Ventas   None                     2               2
+    4  Lucio     1600    Dirección      M                     0               1
+    5   Sara     1500       Ventas      F                     2               0
+    
 
 De forma manual, con pandas, también se puede realizar esta codificación de manera sencilla utilizando la función `factorize()`, que crea una tupla de dos elementos. El primero es un array de NumPy con los valores codificados, y el segundo es un array de NumPy con los valores únicos de la columna original. Al igual que con `LabelEncoder`, esta función no maneja los valores faltantes (NaN) de forma predeterminada, por lo que es necesario reemplazar esos valores por un texto o una categoría antes de aplicar la codificación.
 
@@ -1447,13 +1449,14 @@ df['departamento_encoded'] = pd.factorize(df['departamento'])[0] # Aplicar Label
 print(df)
 ```
 
-
-
-
-    (array([0, 1, 2, 0, 1, 0]),
-     Index(['Ventas', 'Dirección', 'Producción'], dtype='object'))
-
-
+      nombre  salario departamento género  departamento_encoded
+    0   Juan     1200       Ventas      M                     0
+    1  María     1900    Dirección      F                     1
+    2  Pedro     2500   Producción      M                     2
+    3    Ana     1300       Ventas    NaN                     0
+    4  Lucio     1600    Dirección      M                     1
+    5   Sara     1500       Ventas      F                     0
+    
 
 ### *Ordinal Encoding*
 El *Ordinal Encoding* es una técnica de codificación que asigna un número entero a cada categoría de una variable categórica, pero a diferencia del *Label Encoding*, el *Ordinal Encoding* tiene en cuenta el orden de las categorías. Por ejemplo, si tenemos estos datos en una columna:
@@ -1632,6 +1635,26 @@ df = pd.DataFrame({
     'nombre_completo': ['Juan Pérez', 'María Gómez', 'Pedro Rodríguez', 'Ana Martínez', 'Lucio Fernández', 'Sara López']
 })
 df[['nombre', 'apellido']] = df['nombre_completo'].str.split(' ', expand=True) # Dividir la columna nombre_completo en dos columnas separadas para el nombre y el apellido utilizando el espacio como delimitador, y asignar el resultado a las nuevas columnas nombre y apellido
+print(df)
+```
+
+       nombre_completo nombre   apellido
+    0       Juan Pérez   Juan      Pérez
+    1      María Gómez  María      Gómez
+    2  Pedro Rodríguez  Pedro  Rodríguez
+    3     Ana Martínez    Ana   Martínez
+    4  Lucio Fernández  Lucio  Fernández
+    5       Sara López   Sara      López
+    
+
+El parámetro `n` de la función `str.split()` se puede utilizar para limitar el número de divisiones que se realizan en la cadena de texto. Esto es útil cuando se desea dividir una cadena de texto en un número específico de partes, incluso si hay más delimitadores presentes en la cadena. Por ejemplo, si se establece `n=1`, la función dividirá la cadena de texto en dos partes: la primera parte contendrá todo lo que esté antes del primer delimitador, y la segunda parte contendrá todo lo que esté después del primer delimitador, sin importar cuántos delimitadores haya en total en la cadena. Esto puede ser útil para extraer solo el primer componente de una cadena de texto delimitada por un espacio, como el nombre en un nombre completo, sin preocuparse por los apellidos o cualquier otro componente que pueda estar presente en la cadena de texto.
+
+
+```python
+df = pd.DataFrame({
+    'nombre_completo': ['Juan Pérez', 'María Gómez', 'Pedro Rodríguez', 'Ana Martínez', 'Lucio Fernández', 'Sara López']
+})
+df[['nombre', 'apellido']] = df['nombre_completo'].str.split(' ', n=1, expand=True)
 print(df)
 ```
 
